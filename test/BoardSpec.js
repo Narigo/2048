@@ -69,9 +69,4 @@ describe('Board', function () {
     expect(board.isGameOver()).toBe(true);
   });
 
-  it('is over if the whole board is filled and no possible moves detected', function () {
-    expect(board.getEmptyCells().length).toBe(16);
-    board.nextRound();
-    expect(board.getEmptyCells().length).toBe(15);
-  });
 });
