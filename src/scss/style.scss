@@ -1,0 +1,23 @@
+@import "variables";
+
+#game {
+  width: 400px;
+  height: 400px;
+  background-color: $bg-color;
+
+  .row {
+    display: block;
+  }
+
+  .tile {
+    float: left;
+    width: 90px;
+    height: 90px;
+    text-align: center;
+    line-height: 90px;
+    color: $number-color;
+    border: 5px solid $bg-color;
+    background-color: $tile-color;
+  }
+
+}
