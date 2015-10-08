@@ -7,8 +7,8 @@ function Board(tiles) {
     var ids = /^tile-(\d)(\d)$/.exec(tile.id);
     tile.gameData = {
       filled : false,
-      x : ids[2],
-      y : ids[1],
+      x : parseInt(ids[2]),
+      y : parseInt(ids[1]),
       id : tile.id,
       value : 0
     };
@@ -51,10 +51,54 @@ Board.prototype.fillTile = function (tile, number) {
   tile.classList.remove();
   tile.classList.add('number-' + number);
   tile.innerHTML = number;
+
+  this._gameOver = checkGameOver(this);
 };
 
-Board.prototype.isGameOver = function() {
+Board.prototype.getTile = function (id) {
+  return this._board[id % 4][Math.floor(id / 4)];
+};
+
+Board.prototype.isMoveXPossible = function () {
+  var oldTile;
+  var data, i, oldData, tile;
+  for (i = 0; i < 16; i++) {
+    tile = this.getTile(i);
+    if (oldTile) {
+      oldData = oldTile.gameData;
+      data = tile.gameData;
+      if (oldData.value > 0 && data.y === oldData.y && (data.value === oldData.value || data.value === 0)) {
+        return true;
+      }
+    }
+    oldTile = tile;
+  }
+  return false;
+};
+
+Board.prototype.isMoveYPossible = function () {
+  var oldTile;
+  var data, i, oldData, tile;
+  for (i = 0; i < 16; i++) {
+    tile = this.getTile((i * 4) % 15);
+    if (oldTile) {
+      oldData = oldTile.gameData;
+      data = tile.gameData;
+      if (oldData.value > 0 && data.x === oldData.x && (data.value === oldData.value || data.value === 0)) {
+        return true;
+      }
+    }
+    oldTile = tile;
+  }
+  return false;
+};
+
+Board.prototype.isGameOver = function () {
   return this._gameOver;
 };
+
+function checkGameOver(board) {
+  return !(board.isMoveXPossible() || board.isMoveYPossible());
+}
 
 module.exports = Board;
