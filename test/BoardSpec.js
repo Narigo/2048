@@ -107,4 +107,26 @@ describe('Board', function () {
     expect(board.isGameOver()).toBe(true);
   });
 
+  it('can merge two adjacent cells with the same value', function() {
+    board.fillTile(board.getTile(2), 2);
+    board.fillTile(board.getTile(3), 2);
+    board.moveRight();
+    expect(board.getTile(2).gameData.value).toBe(0);
+    expect(board.getTile(3).gameData.value).toBe(4);
+  });
+
+  it('moves full cells to empty cells', function() {
+    board.fillTile(board.getTile(2), 2);
+    board.moveRight();
+    expect(board.getTile(2).gameData.value).toBe(0);
+    expect(board.getTile(3).gameData.value).toBe(2);
+  });
+
+  it('moves full cells to the last empty cell', function() {
+    board.fillTile(board.getTile(1), 2);
+    board.moveRight();
+    expect(board.getTile(1).gameData.value).toBe(0);
+    expect(board.getTile(3).gameData.value).toBe(2);
+  });
+
 });
