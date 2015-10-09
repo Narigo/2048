@@ -129,4 +129,46 @@ describe('Board', function () {
     expect(board.getTile(3).gameData.value).toBe(2);
   });
 
+  it('moves full cells and does not merge if different values', function() {
+    board.fillTile(board.getTile(1), 2);
+    board.fillTile(board.getTile(3), 4);
+    board.moveRight();
+    expect(board.getTile(0).gameData.value).toBe(0);
+    expect(board.getTile(1).gameData.value).toBe(0);
+    expect(board.getTile(2).gameData.value).toBe(2);
+    expect(board.getTile(3).gameData.value).toBe(4);
+  });
+
+  it('moves and merges full cells with same values', function() {
+    board.fillTile(board.getTile(1), 2);
+    board.fillTile(board.getTile(3), 2);
+    board.moveRight();
+    expect(board.getTile(0).gameData.value).toBe(0);
+    expect(board.getTile(1).gameData.value).toBe(0);
+    expect(board.getTile(2).gameData.value).toBe(0);
+    expect(board.getTile(3).gameData.value).toBe(4);
+  });
+
+  it('moves and merges full cells with same values', function() {
+    board.fillTile(board.getTile(0), 2);
+    board.fillTile(board.getTile(1), 2);
+    board.fillTile(board.getTile(3), 4);
+    board.moveRight();
+    expect(board.getTile(0).gameData.value).toBe(0);
+    expect(board.getTile(1).gameData.value).toBe(0);
+    expect(board.getTile(2).gameData.value).toBe(4);
+    expect(board.getTile(3).gameData.value).toBe(4);
+  });
+
+  it('moves over empty cells and merges full cells with same values', function() {
+    board.fillTile(board.getTile(0), 2);
+    board.fillTile(board.getTile(2), 2);
+    board.fillTile(board.getTile(3), 4);
+    board.moveRight();
+    expect(board.getTile(0).gameData.value).toBe(0);
+    expect(board.getTile(1).gameData.value).toBe(0);
+    expect(board.getTile(2).gameData.value).toBe(4);
+    expect(board.getTile(3).gameData.value).toBe(4);
+  });
+
 });
