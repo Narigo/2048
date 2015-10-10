@@ -72,7 +72,7 @@ describe('Board', function () {
     }
   });
 
-  it('can tell whether a move on x-axis is possible', function() {
+  it('can tell whether a move on x-axis is possible', function () {
     board.fillTile(board.getTile(0), 2);
     expect(board.isMoveXPossible()).toBe(true);
     board.fillTile(board.getTile(1), 4);
@@ -83,7 +83,7 @@ describe('Board', function () {
     expect(board.isMoveXPossible()).toBe(true);
   });
 
-  it('can tell whether a move on y-axis is possible', function() {
+  it('can tell whether a move on y-axis is possible', function () {
     board.fillTile(board.getTile(0), 2);
     expect(board.isMoveYPossible()).toBe(true);
     board.fillTile(board.getTile(4), 4);
@@ -107,68 +107,117 @@ describe('Board', function () {
     expect(board.isGameOver()).toBe(true);
   });
 
-  it('can merge two adjacent cells with the same value', function() {
-    board.fillTile(board.getTile(2), 2);
-    board.fillTile(board.getTile(3), 2);
+  it('can merge two adjacent cells with the same value', function () {
+    var y;
+    for (y = 0; y < 16; y += 4) {
+      board.fillTile(board.getTile(y + 2), 2);
+      board.fillTile(board.getTile(y + 3), 2);
+    }
+
     board.moveRight();
-    expect(board.getTile(2).gameData.value).toBe(0);
-    expect(board.getTile(3).gameData.value).toBe(4);
+
+    for (y = 0; y < 16; y += 4) {
+      expect(board.getTile(y + 2).gameData.value).toBe(0);
+      expect(board.getTile(y + 3).gameData.value).toBe(4);
+    }
   });
 
-  it('moves full cells to empty cells', function() {
-    board.fillTile(board.getTile(2), 2);
+  it('moves full cells to empty cells', function () {
+    var y;
+    for (y = 0; y < 16; y += 4) {
+      board.fillTile(board.getTile(y + 2), 2);
+    }
+
     board.moveRight();
-    expect(board.getTile(2).gameData.value).toBe(0);
-    expect(board.getTile(3).gameData.value).toBe(2);
+
+    for (y = 0; y < 16; y += 4) {
+      expect(board.getTile(y + 2).gameData.value).toBe(0);
+      expect(board.getTile(y + 3).gameData.value).toBe(2);
+    }
   });
 
-  it('moves full cells to the last empty cell', function() {
-    board.fillTile(board.getTile(1), 2);
+  it('moves full cells to the last empty cell', function () {
+    var y;
+    for (y = 0; y < 16; y += 4) {
+      board.fillTile(board.getTile(y + 1), 2);
+    }
+
     board.moveRight();
-    expect(board.getTile(1).gameData.value).toBe(0);
-    expect(board.getTile(3).gameData.value).toBe(2);
+
+    for (y = 0; y < 16; y += 4) {
+      expect(board.getTile(y + 1).gameData.value).toBe(0);
+      expect(board.getTile(y + 3).gameData.value).toBe(2);
+    }
   });
 
-  it('moves full cells and does not merge if different values', function() {
-    board.fillTile(board.getTile(1), 2);
-    board.fillTile(board.getTile(3), 4);
+  it('moves full cells and does not merge if different values', function () {
+    var y;
+    for (y = 0; y < 16; y += 4) {
+      board.fillTile(board.getTile(y + 1), 2);
+      board.fillTile(board.getTile(y + 3), 4);
+    }
+
     board.moveRight();
-    expect(board.getTile(0).gameData.value).toBe(0);
-    expect(board.getTile(1).gameData.value).toBe(0);
-    expect(board.getTile(2).gameData.value).toBe(2);
-    expect(board.getTile(3).gameData.value).toBe(4);
+
+    for (y = 0; y < 16; y += 4) {
+      expect(board.getTile(y + 0).gameData.value).toBe(0);
+      expect(board.getTile(y + 1).gameData.value).toBe(0);
+      expect(board.getTile(y + 2).gameData.value).toBe(2);
+      expect(board.getTile(y + 3).gameData.value).toBe(4);
+    }
   });
 
-  it('moves and merges full cells with same values', function() {
-    board.fillTile(board.getTile(1), 2);
-    board.fillTile(board.getTile(3), 2);
+  it('moves and merges full cells with same values', function () {
+    var y;
+    for (y = 0; y < 16; y += 4) {
+      board.fillTile(board.getTile(y + 1), 2);
+      board.fillTile(board.getTile(y + 3), 2);
+    }
+
     board.moveRight();
-    expect(board.getTile(0).gameData.value).toBe(0);
-    expect(board.getTile(1).gameData.value).toBe(0);
-    expect(board.getTile(2).gameData.value).toBe(0);
-    expect(board.getTile(3).gameData.value).toBe(4);
+
+    for (y = 0; y < 16; y += 4) {
+      expect(board.getTile(y + 0).gameData.value).toBe(0);
+      expect(board.getTile(y + 1).gameData.value).toBe(0);
+      expect(board.getTile(y + 2).gameData.value).toBe(0);
+      expect(board.getTile(y + 3).gameData.value).toBe(4);
+    }
   });
 
-  it('moves and merges full cells with same values', function() {
-    board.fillTile(board.getTile(0), 2);
-    board.fillTile(board.getTile(1), 2);
-    board.fillTile(board.getTile(3), 4);
+  it('moves and merges full cells with same values', function () {
+    var y;
+    for (y = 0; y < 16; y += 4) {
+      board.fillTile(board.getTile(y + 0), 2);
+      board.fillTile(board.getTile(y + 1), 2);
+      board.fillTile(board.getTile(y + 3), 4);
+    }
+
     board.moveRight();
-    expect(board.getTile(0).gameData.value).toBe(0);
-    expect(board.getTile(1).gameData.value).toBe(0);
-    expect(board.getTile(2).gameData.value).toBe(4);
-    expect(board.getTile(3).gameData.value).toBe(4);
+
+    for (y = 0; y < 16; y += 4) {
+      expect(board.getTile(y + 0).gameData.value).toBe(0);
+      expect(board.getTile(y + 1).gameData.value).toBe(0);
+      expect(board.getTile(y + 2).gameData.value).toBe(4);
+      expect(board.getTile(y + 3).gameData.value).toBe(4);
+    }
   });
 
-  it('moves over empty cells and merges full cells with same values', function() {
-    board.fillTile(board.getTile(0), 2);
-    board.fillTile(board.getTile(2), 2);
-    board.fillTile(board.getTile(3), 4);
+  it('moves over empty cells and merges full cells with same values', function () {
+    var y;
+    for (y = 0; y < 16; y += 4) {
+      board.fillTile(board.getTile(y + 0), 2);
+      board.fillTile(board.getTile(y + 2), 2);
+      board.fillTile(board.getTile(y + 3), 4);
+    }
+
     board.moveRight();
-    expect(board.getTile(0).gameData.value).toBe(0);
-    expect(board.getTile(1).gameData.value).toBe(0);
-    expect(board.getTile(2).gameData.value).toBe(4);
-    expect(board.getTile(3).gameData.value).toBe(4);
+
+    for (y = 0; y < 16; y += 4) {
+      expect(board.getTile(y + 0).gameData.value).toBe(0);
+      expect(board.getTile(y + 1).gameData.value).toBe(0);
+      expect(board.getTile(y + 2).gameData.value).toBe(4);
+      expect(board.getTile(y + 3).gameData.value).toBe(4);
+    }
   });
 
 });
