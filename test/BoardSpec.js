@@ -160,7 +160,7 @@ describe('Board', function () {
     board.moveRight();
 
     for (y = 0; y < 16; y += 4) {
-      expect(board.getTile(y + 0).gameData.value).toBe(0);
+      expect(board.getTile(y).gameData.value).toBe(0);
       expect(board.getTile(y + 1).gameData.value).toBe(0);
       expect(board.getTile(y + 2).gameData.value).toBe(2);
       expect(board.getTile(y + 3).gameData.value).toBe(4);
@@ -177,7 +177,7 @@ describe('Board', function () {
     board.moveRight();
 
     for (y = 0; y < 16; y += 4) {
-      expect(board.getTile(y + 0).gameData.value).toBe(0);
+      expect(board.getTile(y).gameData.value).toBe(0);
       expect(board.getTile(y + 1).gameData.value).toBe(0);
       expect(board.getTile(y + 2).gameData.value).toBe(0);
       expect(board.getTile(y + 3).gameData.value).toBe(4);
@@ -187,7 +187,7 @@ describe('Board', function () {
   it('moves and merges full cells with same values', function () {
     var y;
     for (y = 0; y < 16; y += 4) {
-      board.fillTile(board.getTile(y + 0), 2);
+      board.fillTile(board.getTile(y), 2);
       board.fillTile(board.getTile(y + 1), 2);
       board.fillTile(board.getTile(y + 3), 4);
     }
@@ -195,7 +195,7 @@ describe('Board', function () {
     board.moveRight();
 
     for (y = 0; y < 16; y += 4) {
-      expect(board.getTile(y + 0).gameData.value).toBe(0);
+      expect(board.getTile(y).gameData.value).toBe(0);
       expect(board.getTile(y + 1).gameData.value).toBe(0);
       expect(board.getTile(y + 2).gameData.value).toBe(4);
       expect(board.getTile(y + 3).gameData.value).toBe(4);
@@ -205,7 +205,7 @@ describe('Board', function () {
   it('moves over empty cells and merges full cells with same values', function () {
     var y;
     for (y = 0; y < 16; y += 4) {
-      board.fillTile(board.getTile(y + 0), 2);
+      board.fillTile(board.getTile(y), 2);
       board.fillTile(board.getTile(y + 2), 2);
       board.fillTile(board.getTile(y + 3), 4);
     }
@@ -213,7 +213,7 @@ describe('Board', function () {
     board.moveRight();
 
     for (y = 0; y < 16; y += 4) {
-      expect(board.getTile(y + 0).gameData.value).toBe(0);
+      expect(board.getTile(y).gameData.value).toBe(0);
       expect(board.getTile(y + 1).gameData.value).toBe(0);
       expect(board.getTile(y + 2).gameData.value).toBe(4);
       expect(board.getTile(y + 3).gameData.value).toBe(4);
