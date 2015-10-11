@@ -210,14 +210,28 @@ describe('Board', function () {
       board.fillTile(board.getTile(y + 3), 4);
     }
 
+    checkBoardValues([
+      [2,0,2,4],
+      [2,0,2,4],
+      [2,0,2,4],
+      [2,0,2,4]
+    ]);
+
     board.moveRight();
 
-    for (y = 0; y < 16; y += 4) {
-      expect(board.getTile(y).gameData.value).toBe(0);
-      expect(board.getTile(y + 1).gameData.value).toBe(0);
-      expect(board.getTile(y + 2).gameData.value).toBe(4);
-      expect(board.getTile(y + 3).gameData.value).toBe(4);
-    }
+    checkBoardValues([
+      [0,0,4,4],
+      [0,0,4,4],
+      [0,0,4,4],
+      [0,0,4,4]
+    ]);
   });
 
+  function checkBoardValues(expectedBoard) {
+    for (var y = 0; y < expectedBoard.length; y++) {
+      for (var x = 0; x < expectedBoard[y].length; x++) {
+        expect(board._board[x][y].gameData.value).toBe(expectedBoard[y][x]);
+      }
+    }
+  }
 });
