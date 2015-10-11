@@ -105,8 +105,12 @@ Board.prototype.moveRight = function () {
 
         if (isEmptyTile(tile) || tile.gameData.value === this._board[x][y].gameData.value) {
           mergeTile(this._board[x][y], tile);
-        } else if (x < mostRightX - 1) {
+          //tile = this._board[x][y];
+        } else if (x < mostRightX - 1 && tile.gameData.value === this._board[x][y].gameData.value) {
           mergeTile(this._board[x][y], this._board[mostRightX - 1][y]);
+          tile = this._board[mostRightX - 1][y];
+        } else if (x < mostRightX - 1 && isEmptyTile(tile)) {
+          moveTile(this._board[x][y], this._board[mostRightX - 1][y]);
           tile = this._board[mostRightX - 1][y];
         }
       }
@@ -124,6 +128,12 @@ function isEmptyTile(tile) {
 
 function mergeTile(a, b) {
   b.gameData.value = b.gameData.value + a.gameData.value;
+  b.innerHTML = b.gameData.value;
+  emptyTile(a);
+}
+
+function moveTile(a, b) {
+  b.gameData.value = a.gameData.value;
   b.innerHTML = b.gameData.value;
   emptyTile(a);
 }

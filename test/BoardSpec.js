@@ -211,27 +211,61 @@ describe('Board', function () {
     }
 
     checkBoardValues([
-      [2,0,2,4],
-      [2,0,2,4],
-      [2,0,2,4],
-      [2,0,2,4]
+      [2, 0, 2, 4],
+      [2, 0, 2, 4],
+      [2, 0, 2, 4],
+      [2, 0, 2, 4]
     ]);
 
     board.moveRight();
 
     checkBoardValues([
-      [0,0,4,4],
-      [0,0,4,4],
-      [0,0,4,4],
-      [0,0,4,4]
+      [0, 0, 4, 4],
+      [0, 0, 4, 4],
+      [0, 0, 4, 4],
+      [0, 0, 4, 4]
     ]);
   });
 
+  it('moves and merges a specified scenario correctly', function () {
+    fillBoardValues([
+      [0, 2, 2, 0],
+      [4, 0, 4, 4],
+      [4, 2, 2, 2],
+      [2, 2, 2, 2]
+    ]);
+
+    board.moveRight();
+
+    checkBoardValues([
+      [0, 0, 0, 4],
+      [0, 0, 4, 8],
+      [0, 4, 2, 4],
+      [0, 0, 4, 4]
+    ]);
+  });
+
+  function fillBoardValues(filledBoard) {
+    var str = 'filling board';
+    for (var y = 0; y < filledBoard.length; y++) {
+      str += '\n';
+      for (var x = 0; x < filledBoard[y].length; x++) {
+        board.fillTile(board.getTile(y * 4 + x), filledBoard[y][x]);
+        str += ' ' + board._board[x][y].gameData.value;
+      }
+    }
+    console.log(str);
+  }
+
   function checkBoardValues(expectedBoard) {
+    var str = 'checking board';
     for (var y = 0; y < expectedBoard.length; y++) {
+      str += '\n';
       for (var x = 0; x < expectedBoard[y].length; x++) {
+        str += ' ' + board._board[x][y].gameData.value;
         expect(board._board[x][y].gameData.value).toBe(expectedBoard[y][x]);
       }
     }
+    console.log(str);
   }
 });
