@@ -103,9 +103,11 @@ Board.prototype.moveRight = function () {
           continue;
         }
 
-        if (isEmptyTile(tile) || tile.gameData.value === this._board[x][y].gameData.value) {
+        if (isEmptyTile(tile)) {
           mergeTile(this._board[x][y], tile);
-          //tile = this._board[x][y];
+        } else if (tile.gameData.value === this._board[x][y].gameData.value) {
+          mergeTile(this._board[x][y], tile);
+          tile = this._board[x][y];
         } else if (x < mostRightX - 1 && tile.gameData.value === this._board[x][y].gameData.value) {
           mergeTile(this._board[x][y], this._board[mostRightX - 1][y]);
           tile = this._board[mostRightX - 1][y];
