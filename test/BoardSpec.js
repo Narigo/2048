@@ -185,45 +185,38 @@ describe('Board', function () {
   });
 
   it('moves and merges full cells with same values', function () {
-    var y;
-    for (y = 0; y < 16; y += 4) {
-      board.fillTile(board.getTile(y), 2);
-      board.fillTile(board.getTile(y + 1), 2);
-      board.fillTile(board.getTile(y + 3), 4);
-    }
-
-    board.moveRight();
-
-    for (y = 0; y < 16; y += 4) {
-      expect(board.getTile(y).gameData.value).toBe(0);
-      expect(board.getTile(y + 1).gameData.value).toBe(0);
-      expect(board.getTile(y + 2).gameData.value).toBe(4);
-      expect(board.getTile(y + 3).gameData.value).toBe(4);
-    }
-  });
-
-  it('moves over empty cells and merges full cells with same values', function () {
-    var y;
-    for (y = 0; y < 16; y += 4) {
-      board.fillTile(board.getTile(y), 2);
-      board.fillTile(board.getTile(y + 2), 2);
-      board.fillTile(board.getTile(y + 3), 4);
-    }
-
-    checkBoardValues([
-      [2, 0, 2, 4],
-      [2, 0, 2, 4],
-      [2, 0, 2, 4],
-      [2, 0, 2, 4]
+    fillBoardValues([
+      [2, 2, 2, 2],
+      [4, 2, 2, 4],
+      [0, 0, 2, 2],
+      [2, 2, 0, 0]
     ]);
 
     board.moveRight();
 
     checkBoardValues([
       [0, 0, 4, 4],
+      [0, 4, 4, 4],
+      [0, 0, 0, 4],
+      [0, 0, 0, 4]
+    ]);
+  });
+
+  it('moves over empty cells and merges full cells with same values', function () {
+    fillBoardValues([
+      [2, 0, 2, 4],
+      [4, 0, 4, 2],
+      [2, 0, 2, 4],
+      [2, 0, 0, 2]
+    ]);
+
+    board.moveRight();
+
+    checkBoardValues([
       [0, 0, 4, 4],
+      [0, 0, 8, 2],
       [0, 0, 4, 4],
-      [0, 0, 4, 4]
+      [0, 0, 0, 4]
     ]);
   });
 
