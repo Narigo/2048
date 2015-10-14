@@ -137,34 +137,39 @@ describe('Board', function () {
   });
 
   it('moves full cells to the last empty cell', function () {
-    var y;
-    for (y = 0; y < 16; y += 4) {
-      board.fillTile(board.getTile(y + 1), 2);
-    }
+    fillBoardValues([
+      [2, 0, 0, 0],
+      [0, 2, 0, 0],
+      [0, 0, 2, 0],
+      [0, 0, 0, 2]
+    ]);
 
     board.moveRight();
 
-    for (y = 0; y < 16; y += 4) {
-      expect(board.getTile(y + 1).gameData.value).toBe(0);
-      expect(board.getTile(y + 3).gameData.value).toBe(2);
-    }
+    checkBoardValues([
+      [0, 0, 0, 2],
+      [0, 0, 0, 2],
+      [0, 0, 0, 2],
+      [0, 0, 0, 2]
+    ]);
   });
 
   it('moves full cells and does not merge if different values', function () {
-    var y;
-    for (y = 0; y < 16; y += 4) {
-      board.fillTile(board.getTile(y + 1), 2);
-      board.fillTile(board.getTile(y + 3), 4);
-    }
+    fillBoardValues([
+      [2, 4, 0, 0],
+      [2, 0, 4, 0],
+      [0, 2, 0, 4],
+      [4, 0, 0, 2]
+    ]);
 
     board.moveRight();
 
-    for (y = 0; y < 16; y += 4) {
-      expect(board.getTile(y).gameData.value).toBe(0);
-      expect(board.getTile(y + 1).gameData.value).toBe(0);
-      expect(board.getTile(y + 2).gameData.value).toBe(2);
-      expect(board.getTile(y + 3).gameData.value).toBe(4);
-    }
+    checkBoardValues([
+      [0, 0, 2, 4],
+      [0, 0, 2, 4],
+      [0, 0, 2, 4],
+      [0, 0, 4, 2]
+    ]);
   });
 
   it('moves and merges full cells with same values', function () {
@@ -252,13 +257,17 @@ describe('Board', function () {
 
   function checkBoardValues(expectedBoard) {
     var str = 'checking board';
+    var expected = 'expected board';
     for (var y = 0; y < expectedBoard.length; y++) {
       str += '\n';
+      expected += '\n';
       for (var x = 0; x < expectedBoard[y].length; x++) {
+        expected += ' ' + expectedBoard[y][x];
         str += ' ' + board._board[x][y].gameData.value;
         expect(board._board[x][y].gameData.value).toBe(expectedBoard[y][x]);
       }
     }
+    console.log(expected);
     console.log(str);
   }
 });

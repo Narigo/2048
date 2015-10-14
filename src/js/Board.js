@@ -103,17 +103,17 @@ Board.prototype.moveRight = function () {
           continue;
         }
 
+        // current tile not empty
         if (isEmptyTile(tile)) {
-          mergeTile(this._board[x][y], tile);
+          moveTile(this._board[x][y], tile);
         } else if (tile.gameData.value === this._board[x][y].gameData.value) {
           mergeTile(this._board[x][y], tile);
-          tile = this._board[x][y];
-        } else if (x < mostRightX - 1 && tile.gameData.value === this._board[x][y].gameData.value) {
-          mergeTile(this._board[x][y], this._board[mostRightX - 1][y]);
-          tile = this._board[mostRightX - 1][y];
-        } else if (x < mostRightX - 1 && isEmptyTile(tile)) {
-          moveTile(this._board[x][y], this._board[mostRightX - 1][y]);
-          tile = this._board[mostRightX - 1][y];
+          x = x - 1;
+          if (x >= 0) {
+            tile = this._board[x][y];
+          }
+        } else {
+          break;
         }
       }
     }
