@@ -3,6 +3,14 @@ var Board = require('../src/js/Board');
 describe('Board', function () {
 
   var board;
+  var debug = false;
+
+  var log = console.log;
+  console.log = function() {
+    if (debug) {
+      log.apply(this, arguments);
+    }
+  };
 
   // inject the HTML fixture for the tests
   var fixture = '<div id="game">' +
