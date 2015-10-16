@@ -6,7 +6,7 @@ describe('Board', function () {
   var debug = false;
 
   var log = console.log;
-  console.log = function() {
+  console.log = function () {
     if (debug) {
       log.apply(this, arguments);
     }
@@ -115,140 +115,228 @@ describe('Board', function () {
     expect(board.isGameOver()).toBe(true);
   });
 
-  it('can merge two adjacent cells with the same value', function () {
-    var y;
-    for (y = 0; y < 16; y += 4) {
-      board.fillTile(board.getTile(y + 2), 2);
-      board.fillTile(board.getTile(y + 3), 2);
-    }
+  describe('Move/merge right', function () {
 
-    board.moveRight();
+    it('can merge two adjacent cells with the same value', function () {
+      fillBoardValues([
+        [0, 0, 2, 2],
+        [0, 2, 2, 0],
+        [2, 2, 0, 0],
+        [2, 2, 2, 2]
+      ]);
 
-    for (y = 0; y < 16; y += 4) {
-      expect(board.getTile(y + 2).gameData.value).toBe(0);
-      expect(board.getTile(y + 3).gameData.value).toBe(4);
-    }
+      board.moveRight();
+
+      checkBoardValues([
+        [0, 0, 0, 4],
+        [0, 0, 0, 4],
+        [0, 0, 0, 4],
+        [0, 0, 4, 4]
+      ]);
+    });
+
+    it('moves full cells to the last empty cell', function () {
+      fillBoardValues([
+        [2, 0, 0, 0],
+        [0, 2, 0, 0],
+        [0, 0, 2, 0],
+        [0, 0, 0, 2]
+      ]);
+
+      board.moveRight();
+
+      checkBoardValues([
+        [0, 0, 0, 2],
+        [0, 0, 0, 2],
+        [0, 0, 0, 2],
+        [0, 0, 0, 2]
+      ]);
+    });
+
+    it('moves full cells and does not merge if different values', function () {
+      fillBoardValues([
+        [2, 4, 0, 0],
+        [2, 0, 4, 0],
+        [0, 2, 0, 4],
+        [4, 0, 0, 2]
+      ]);
+
+      board.moveRight();
+
+      checkBoardValues([
+        [0, 0, 2, 4],
+        [0, 0, 2, 4],
+        [0, 0, 2, 4],
+        [0, 0, 4, 2]
+      ]);
+    });
+
+    it('moves and merges full cells with same values', function () {
+      fillBoardValues([
+        [2, 2, 2, 2],
+        [4, 2, 2, 4],
+        [0, 0, 2, 2],
+        [2, 2, 0, 0]
+      ]);
+
+      board.moveRight();
+
+      checkBoardValues([
+        [0, 0, 4, 4],
+        [0, 4, 4, 4],
+        [0, 0, 0, 4],
+        [0, 0, 0, 4]
+      ]);
+    });
+
+    it('moves over empty cells and merges full cells with same values', function () {
+      fillBoardValues([
+        [2, 0, 2, 4],
+        [4, 0, 4, 2],
+        [2, 0, 2, 4],
+        [2, 0, 0, 2]
+      ]);
+
+      board.moveRight();
+
+      checkBoardValues([
+        [0, 0, 4, 4],
+        [0, 0, 8, 2],
+        [0, 0, 4, 4],
+        [0, 0, 0, 4]
+      ]);
+    });
+
+    it('moves and merges a specified scenario correctly', function () {
+      fillBoardValues([
+        [0, 2, 2, 0],
+        [4, 0, 4, 4],
+        [4, 2, 2, 2],
+        [2, 2, 2, 2]
+      ]);
+
+      board.moveRight();
+
+      checkBoardValues([
+        [0, 0, 0, 4],
+        [0, 0, 4, 8],
+        [0, 4, 2, 4],
+        [0, 0, 4, 4]
+      ]);
+    });
+
   });
 
-  it('moves full cells to empty cells', function () {
-    var y;
-    for (y = 0; y < 16; y += 4) {
-      board.fillTile(board.getTile(y + 2), 2);
-    }
+  describe('Move/merge left', function () {
 
-    board.moveRight();
+    it('can merge two adjacent cells with the same value', function () {
+      fillBoardValues([
+        [2, 2, 0, 0],
+        [0, 2, 2, 0],
+        [0, 0, 2, 2],
+        [2, 2, 2, 2]
+      ]);
 
-    for (y = 0; y < 16; y += 4) {
-      expect(board.getTile(y + 2).gameData.value).toBe(0);
-      expect(board.getTile(y + 3).gameData.value).toBe(2);
-    }
-  });
+      board.moveLeft();
 
-  it('moves full cells to the last empty cell', function () {
-    fillBoardValues([
-      [2, 0, 0, 0],
-      [0, 2, 0, 0],
-      [0, 0, 2, 0],
-      [0, 0, 0, 2]
-    ]);
+      checkBoardValues([
+        [4, 0, 0, 0],
+        [4, 0, 0, 0],
+        [4, 0, 0, 0],
+        [4, 4, 0, 0]
+      ]);
+    });
 
-    board.moveRight();
+    it('moves full cells to the last empty cell', function () {
+      fillBoardValues([
+        [0, 0, 0, 2],
+        [0, 0, 2, 0],
+        [0, 2, 0, 0],
+        [2, 0, 0, 0]
+      ]);
 
-    checkBoardValues([
-      [0, 0, 0, 2],
-      [0, 0, 0, 2],
-      [0, 0, 0, 2],
-      [0, 0, 0, 2]
-    ]);
-  });
+      board.moveLeft();
 
-  it('moves full cells and does not merge if different values', function () {
-    fillBoardValues([
-      [2, 4, 0, 0],
-      [2, 0, 4, 0],
-      [0, 2, 0, 4],
-      [4, 0, 0, 2]
-    ]);
+      checkBoardValues([
+        [2, 0, 0, 0],
+        [2, 0, 0, 0],
+        [2, 0, 0, 0],
+        [2, 0, 0, 0]
+      ]);
+    });
 
-    board.moveRight();
+    it('moves full cells and does not merge if different values', function () {
+      fillBoardValues([
+        [0, 0, 4, 2],
+        [0, 4, 0, 2],
+        [4, 0, 2, 0],
+        [2, 0, 0, 4]
+      ]);
 
-    checkBoardValues([
-      [0, 0, 2, 4],
-      [0, 0, 2, 4],
-      [0, 0, 2, 4],
-      [0, 0, 4, 2]
-    ]);
-  });
+      board.moveLeft();
 
-  it('moves and merges full cells with same values', function () {
-    var y;
-    for (y = 0; y < 16; y += 4) {
-      board.fillTile(board.getTile(y + 1), 2);
-      board.fillTile(board.getTile(y + 3), 2);
-    }
+      checkBoardValues([
+        [4, 2, 0, 0],
+        [4, 2, 0, 0],
+        [4, 2, 0, 0],
+        [2, 4, 0, 0]
+      ]);
+    });
 
-    board.moveRight();
+    it('moves and merges full cells with same values', function () {
+      fillBoardValues([
+        [2, 2, 2, 2],
+        [4, 2, 2, 4],
+        [2, 2, 0, 0],
+        [0, 0, 2, 2]
+      ]);
 
-    for (y = 0; y < 16; y += 4) {
-      expect(board.getTile(y).gameData.value).toBe(0);
-      expect(board.getTile(y + 1).gameData.value).toBe(0);
-      expect(board.getTile(y + 2).gameData.value).toBe(0);
-      expect(board.getTile(y + 3).gameData.value).toBe(4);
-    }
-  });
+      board.moveLeft();
 
-  it('moves and merges full cells with same values', function () {
-    fillBoardValues([
-      [2, 2, 2, 2],
-      [4, 2, 2, 4],
-      [0, 0, 2, 2],
-      [2, 2, 0, 0]
-    ]);
+      checkBoardValues([
+        [4, 4, 0, 0],
+        [4, 4, 4, 0],
+        [4, 0, 0, 0],
+        [4, 0, 0, 0]
+      ]);
+    });
 
-    board.moveRight();
+    it('moves over empty cells and merges full cells with same values', function () {
+      fillBoardValues([
+        [4, 2, 0, 2],
+        [2, 4, 0, 4],
+        [4, 2, 0, 2],
+        [2, 0, 0, 2]
+      ]);
 
-    checkBoardValues([
-      [0, 0, 4, 4],
-      [0, 4, 4, 4],
-      [0, 0, 0, 4],
-      [0, 0, 0, 4]
-    ]);
-  });
+      board.moveLeft();
 
-  it('moves over empty cells and merges full cells with same values', function () {
-    fillBoardValues([
-      [2, 0, 2, 4],
-      [4, 0, 4, 2],
-      [2, 0, 2, 4],
-      [2, 0, 0, 2]
-    ]);
+      checkBoardValues([
+        [4, 4, 0, 0],
+        [2, 8, 0, 0],
+        [4, 4, 0, 0],
+        [4, 0, 0, 0]
+      ]);
+    });
 
-    board.moveRight();
+    it('moves and merges a specified scenario correctly', function () {
+      fillBoardValues([
+        [0, 2, 2, 0],
+        [4, 0, 4, 4],
+        [4, 2, 2, 2],
+        [2, 2, 2, 2]
+      ]);
 
-    checkBoardValues([
-      [0, 0, 4, 4],
-      [0, 0, 8, 2],
-      [0, 0, 4, 4],
-      [0, 0, 0, 4]
-    ]);
-  });
+      board.moveLeft();
 
-  it('moves and merges a specified scenario correctly', function () {
-    fillBoardValues([
-      [0, 2, 2, 0],
-      [4, 0, 4, 4],
-      [4, 2, 2, 2],
-      [2, 2, 2, 2]
-    ]);
+      checkBoardValues([
+        [4, 0, 0, 0],
+        [8, 4, 0, 0],
+        [4, 4, 2, 0],
+        [4, 4, 0, 0]
+      ]);
+    });
 
-    board.moveRight();
-
-    checkBoardValues([
-      [0, 0, 0, 4],
-      [0, 0, 4, 8],
-      [0, 4, 2, 4],
-      [0, 0, 4, 4]
-    ]);
   });
 
   function fillBoardValues(filledBoard) {

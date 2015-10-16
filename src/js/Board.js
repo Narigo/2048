@@ -120,6 +120,33 @@ Board.prototype.moveRight = function () {
   }
 };
 
+Board.prototype.moveLeft = function () {
+  var mostLeftX, tile, x, y;
+  for (y = 0; y < 4; y++) {
+    for (mostLeftX = 0; mostLeftX <= 3; mostLeftX++) {
+      tile = this._board[mostLeftX][y];
+      for (x = mostLeftX + 1; x <= 3; x++) {
+        if (isEmptyTile(this._board[x][y])) {
+          continue;
+        }
+
+        // current tile not empty
+        if (isEmptyTile(tile)) {
+          moveTile(this._board[x][y], tile);
+        } else if (tile.gameData.value === this._board[x][y].gameData.value) {
+          mergeTile(this._board[x][y], tile);
+          x = x + 1;
+          if (x <= 3) {
+            tile = this._board[x][y];
+          }
+        } else {
+          break;
+        }
+      }
+    }
+  }
+};
+
 Board.prototype.isGameOver = function () {
   return this._gameOver;
 };
