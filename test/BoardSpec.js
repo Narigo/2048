@@ -339,6 +339,124 @@ describe('Board', function () {
 
   });
 
+  describe('Move/merge up', function () {
+
+    it('can merge two adjacent cells with the same value', function () {
+      fillBoardValues([
+        [2, 0, 0, 2],
+        [2, 2, 0, 2],
+        [0, 2, 2, 2],
+        [0, 0, 2, 2]
+      ]);
+
+      board.moveUp();
+
+      checkBoardValues([
+        [4, 4, 4, 4],
+        [0, 0, 0, 4],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+    });
+
+    it('moves full cells to the last empty cell', function () {
+      fillBoardValues([
+        [0, 0, 0, 2],
+        [0, 0, 2, 0],
+        [0, 2, 0, 0],
+        [2, 0, 0, 0]
+      ]);
+
+      board.moveUp();
+
+      checkBoardValues([
+        [2, 2, 2, 2],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+    });
+
+    it('moves full cells and does not merge if different values', function () {
+      fillBoardValues([
+        [0, 0, 4, 2],
+        [0, 4, 0, 0],
+        [4, 0, 2, 0],
+        [2, 2, 0, 4]
+      ]);
+
+      board.moveUp();
+
+      checkBoardValues([
+        [4, 4, 4, 2],
+        [2, 2, 2, 4],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+    });
+
+    it('moves and merges full cells with same values', function () {
+      fillBoardValues([
+        [2, 4, 2, 0],
+        [2, 2, 2, 0],
+        [2, 2, 0, 2],
+        [2, 4, 0, 2]
+      ]);
+
+      board.moveUp();
+
+      checkBoardValues([
+        [4, 4, 4, 4],
+        [4, 4, 0, 0],
+        [0, 4, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+    });
+
+    it('moves over empty cells and merges full cells with same values', function () {
+      fillBoardValues([
+        [4, 2, 4, 2],
+        [2, 4, 2, 0],
+        [0, 0, 0, 0],
+        [2, 4, 2, 2]
+      ]);
+
+      board.moveUp();
+
+      checkBoardValues([
+        [4, 2, 4, 4],
+        [4, 8, 4, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+    });
+
+    it('moves and merges a specified scenario correctly', function () {
+      fillBoardValues([
+        [0, 2, 2, 0],
+        [4, 0, 4, 4],
+        [4, 2, 2, 2],
+        [2, 2, 2, 2]
+      ]);
+      fillBoardValues([
+        [0, 4, 4, 2],
+        [2, 0, 2, 2],
+        [2, 4, 2, 2],
+        [0, 4, 2, 2]
+      ]);
+
+      board.moveUp();
+
+      checkBoardValues([
+        [4, 8, 4, 4],
+        [0, 4, 4, 4],
+        [0, 0, 2, 0],
+        [0, 0, 0, 0]
+      ]);
+    });
+
+  });
+
   function fillBoardValues(filledBoard) {
     var str = 'filling board';
     for (var y = 0; y < filledBoard.length; y++) {
