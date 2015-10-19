@@ -433,12 +433,6 @@ describe('Board', function () {
 
     it('moves and merges a specified scenario correctly', function () {
       fillBoardValues([
-        [0, 2, 2, 0],
-        [4, 0, 4, 4],
-        [4, 2, 2, 2],
-        [2, 2, 2, 2]
-      ]);
-      fillBoardValues([
         [0, 4, 4, 2],
         [2, 0, 2, 2],
         [2, 4, 2, 2],
