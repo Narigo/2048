@@ -102,6 +102,22 @@ describe('Board', function () {
     expect(board.isMoveYPossible()).toBe(true);
   });
 
+  it('can tell whether a move on y-axis is possible', function () {
+    fillBoardValues([
+      [4, 0, 0, 0],
+      [8, 4, 0, 0],
+      [16, 2, 0, 4],
+      [128, 8, 4, 0]
+    ]);
+    expect(board.isMoveYPossible()).toBe(true);
+    board.fillTile(board.getTile(3), 4);
+    board.fillTile(board.getTile(7), 8);
+    board.fillTile(board.getTile(15), 16);
+    expect(board.isMoveYPossible()).toBe(false);
+    board.fillTile(board.getTile(3), 2);
+    expect(board.isMoveYPossible()).toBe(true);
+  });
+
   it('is over when no more moves are possible and the board is not empty', function () {
     expect(board.getEmptyCells().length).toBe(16);
     expect(board.isMoveXPossible()).toBe(false);
@@ -113,6 +129,28 @@ describe('Board', function () {
     expect(board.isMoveXPossible()).toBe(false);
     expect(board.isMoveYPossible()).toBe(false);
     expect(board.isGameOver()).toBe(true);
+  });
+
+  it('has the correct amount of empty cells after merge', function () {
+    expect(board.getEmptyCells().length).toBe(16);
+
+    board.fillTile(board.getTile(0), 2);
+    board.fillTile(board.getTile(1), 2);
+    expect(board.getEmptyCells().length).toBe(14);
+
+    board.moveLeft();
+    expect(board.getEmptyCells().length).toBe(15);
+  });
+
+  it('has the correct amount of empty cells after merge', function () {
+    expect(board.getEmptyCells().length).toBe(16);
+
+    board.fillTile(board.getTile(0), 2);
+    board.fillTile(board.getTile(1), 2);
+    expect(board.getEmptyCells().length).toBe(14);
+
+    board.moveRight();
+    expect(board.getEmptyCells().length).toBe(15);
   });
 
   describe('Move/merge right', function () {

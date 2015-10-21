@@ -105,13 +105,10 @@ Board.prototype.moveRight = function () {
 
         // current tile not empty
         if (isEmptyTile(tile)) {
-          moveTile(this._board[x][y], tile);
+          this.moveTile(this._board[x][y], tile);
         } else if (tile.gameData.value === this._board[x][y].gameData.value) {
-          mergeTile(this._board[x][y], tile);
-          x = x - 1;
-          if (x >= 0) {
-            tile = this._board[x][y];
-          }
+          this.mergeTile(this._board[x][y], tile);
+          tile = this._board[x][y];
         } else {
           break;
         }
@@ -132,13 +129,10 @@ Board.prototype.moveLeft = function () {
 
         // current tile not empty
         if (isEmptyTile(tile)) {
-          moveTile(this._board[x][y], tile);
+          this.moveTile(this._board[x][y], tile);
         } else if (tile.gameData.value === this._board[x][y].gameData.value) {
-          mergeTile(this._board[x][y], tile);
-          x = x + 1;
-          if (x <= 3) {
-            tile = this._board[x][y];
-          }
+          this.mergeTile(this._board[x][y], tile);
+          tile = this._board[x][y];
         } else {
           break;
         }
@@ -159,13 +153,10 @@ Board.prototype.moveUp = function () {
 
         // current tile not empty
         if (isEmptyTile(tile)) {
-          moveTile(this._board[x][y], tile);
+          this.moveTile(this._board[x][y], tile);
         } else if (tile.gameData.value === this._board[x][y].gameData.value) {
-          mergeTile(this._board[x][y], tile);
-          y = y + 1;
-          if (y <= 3) {
-            tile = this._board[x][y];
-          }
+          this.mergeTile(this._board[x][y], tile);
+          tile = this._board[x][y];
         } else {
           break;
         }
@@ -186,13 +177,10 @@ Board.prototype.moveDown = function () {
 
         // current tile not empty
         if (isEmptyTile(tile)) {
-          moveTile(this._board[x][y], tile);
+          this.moveTile(this._board[x][y], tile);
         } else if (tile.gameData.value === this._board[x][y].gameData.value) {
-          mergeTile(this._board[x][y], tile);
-          y = y - 1;
-          if (y >= 0) {
-            tile = this._board[x][y];
-          }
+          this.mergeTile(this._board[x][y], tile);
+          tile = this._board[x][y];
         } else {
           break;
         }
@@ -209,20 +197,19 @@ function isEmptyTile(tile) {
   return tile.gameData.value === 0;
 }
 
-function mergeTile(a, b) {
-  b.gameData.value = b.gameData.value + a.gameData.value;
-  b.innerHTML = b.gameData.value;
+Board.prototype.mergeTile = function (a, b) {
+  this.fillTile(b, b.gameData.value + a.gameData.value);
   emptyTile(a);
-}
+};
 
-function moveTile(a, b) {
-  b.gameData.value = a.gameData.value;
-  b.innerHTML = b.gameData.value;
+Board.prototype.moveTile = function (a, b) {
+  this.fillTile(b, a.gameData.value);
   emptyTile(a);
-}
+};
 
 function emptyTile(tile) {
   tile.innerHTML = '';
+  tile.gameData.filled = false;
   tile.gameData.value = 0;
 }
 
