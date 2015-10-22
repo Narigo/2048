@@ -60,16 +60,14 @@ Board.prototype.getTile = function (id) {
 };
 
 Board.prototype.isMoveXPossible = function () {
-  var oldTile;
   var data, i, oldData, tile;
-  for (i = 0; i < 16; i++) {
+  var oldTile = this.getTile(0);
+  for (i = 1; i < 16; i++) {
     tile = this.getTile(i);
-    if (oldTile) {
-      oldData = oldTile.gameData;
-      data = tile.gameData;
-      if (oldData.value > 0 && data.y === oldData.y && (data.value === oldData.value || data.value === 0)) {
-        return true;
-      }
+    oldData = oldTile.gameData;
+    data = tile.gameData;
+    if (oldData.value > 0 && data.y === oldData.y && (data.value === oldData.value || data.value === 0)) {
+      return true;
     }
     oldTile = tile;
   }
@@ -77,16 +75,14 @@ Board.prototype.isMoveXPossible = function () {
 };
 
 Board.prototype.isMoveYPossible = function () {
-  var oldTile;
   var data, i, oldData, tile;
-  for (i = 0; i < 16; i++) {
+  var oldTile = this.getTile(0);
+  for (i = 1; i < 16; i++) {
     tile = this.getTile((i * 4) % 15);
-    if (oldTile) {
-      oldData = oldTile.gameData;
-      data = tile.gameData;
-      if (oldData.value > 0 && data.x === oldData.x && (data.value === oldData.value || data.value === 0)) {
-        return true;
-      }
+    oldData = oldTile.gameData;
+    data = tile.gameData;
+    if (oldData.value > 0 && data.x === oldData.x && (data.value === oldData.value || data.value === 0)) {
+      return true;
     }
     oldTile = tile;
   }
