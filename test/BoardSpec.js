@@ -109,12 +109,10 @@ describe('Board', function () {
       [16, 2, 0, 4],
       [128, 8, 4, 0]
     ]);
+    showBoard(board);
     expect(board.isMoveYPossible()).toBe(true);
-    board.fillTile(board.getTile(3), 4);
-    board.fillTile(board.getTile(7), 8);
     board.fillTile(board.getTile(15), 16);
-    expect(board.isMoveYPossible()).toBe(false);
-    board.fillTile(board.getTile(3), 2);
+    showBoard(board);
     expect(board.isMoveYPossible()).toBe(true);
   });
 
@@ -607,6 +605,17 @@ describe('Board', function () {
       str += '\n';
       for (var x = 0; x < filledBoard[y].length; x++) {
         board.fillTile(board.getTile(y * 4 + x), filledBoard[y][x]);
+        str += ' ' + board._board[x][y].gameData.value;
+      }
+    }
+    console.log(str);
+  }
+
+  function showBoard(board) {
+    var str = 'showing board';
+    for (var y = 0; y < board._board.length; y++) {
+      str += '\n';
+      for (var x = 0; x < board._board[y].length; x++) {
         str += ' ' + board._board[x][y].gameData.value;
       }
     }
