@@ -17,22 +17,29 @@ function onKeyDown(e) {
   move(event.keyCode);
 
   function move(keyCode) {
+    var moved = false;
     if (keyCode === 37 && board.isMoveXPossible()) {
       board.moveLeft();
-      board.nextRound();
+      moved = true;
     } else if (keyCode === 38 && board.isMoveYPossible()) {
       board.moveUp();
-      board.nextRound();
+      moved = true;
     } else if (keyCode === 39 && board.isMoveXPossible()) {
       board.moveRight();
-      board.nextRound();
+      moved = true;
     } else if (keyCode === 40 && board.isMoveYPossible()) {
       board.moveDown();
-      board.nextRound();
+      moved = true;
+    }
+
+    if (moved) {
+      if (board.isGameOver()) {
+        alert('game over!');
+      } else {
+        board.nextRound();
+      }
     }
   }
-
-  console.log(event.keyCode);
 }
 
 document.board = board;
