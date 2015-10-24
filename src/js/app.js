@@ -32,10 +32,10 @@ function onKeyDown(e) {
       moved = true;
     }
 
-    if (moved) {
+    if (keyCode >= 37 && keyCode <= 40) {
       if (board.isGameOver()) {
         alert('game over!');
-      } else {
+      } else if (moved) {
         board.nextRound();
       }
     }
