@@ -129,7 +129,7 @@ describe('Board', function () {
     expect(board.isGameOver()).toBe(true);
   });
 
-  it('has the correct amount of empty cells after merge', function () {
+  it('has the correct amount of empty cells after left merge', function () {
     expect(board.getEmptyCells().length).toBe(16);
 
     board.fillTile(board.getTile(0), 2);
@@ -140,7 +140,7 @@ describe('Board', function () {
     expect(board.getEmptyCells().length).toBe(15);
   });
 
-  it('has the correct amount of empty cells after merge', function () {
+  it('has the correct amount of empty cells after right merge', function () {
     expect(board.getEmptyCells().length).toBe(16);
 
     board.fillTile(board.getTile(0), 2);
