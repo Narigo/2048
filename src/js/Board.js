@@ -195,10 +195,6 @@ Board.prototype.isGameOver = function () {
   return this._gameOver;
 };
 
-function isEmptyTile(tile) {
-  return tile.gameData.value === 0;
-}
-
 Board.prototype.mergeTile = function (a, b) {
   this.fillTile(b, b.gameData.value + a.gameData.value);
   emptyTile(a);
@@ -208,6 +204,10 @@ Board.prototype.moveTile = function (a, b) {
   this.fillTile(b, a.gameData.value);
   emptyTile(a);
 };
+
+function isEmptyTile(tile) {
+  return tile.gameData.value === 0;
+}
 
 function emptyTile(tile) {
   tile.innerHTML = '';
