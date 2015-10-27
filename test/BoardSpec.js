@@ -3,14 +3,9 @@ var Board = require('../src/js/Board');
 describe('Board', function () {
 
   var board;
-  var debug = false;
+  var debugMode = false;
 
-  var log = console.log;
-  console.log = function () {
-    if (debug) {
-      log.apply(this, arguments);
-    }
-  };
+  var debug = (debugMode ? console.log : function() {});
 
   // inject the HTML fixture for the tests
   var fixture = '<div id="game">' +
@@ -608,7 +603,7 @@ describe('Board', function () {
         str += ' ' + board._board[x][y].gameData.value;
       }
     }
-    console.log(str);
+    debug(str);
   }
 
   function showBoard(board) {
@@ -619,7 +614,7 @@ describe('Board', function () {
         str += ' ' + board._board[x][y].gameData.value;
       }
     }
-    console.log(str);
+    debug(str);
   }
 
   function checkBoardValues(expectedBoard) {
@@ -634,7 +629,7 @@ describe('Board', function () {
         expect(board._board[x][y].gameData.value).toBe(expectedBoard[y][x]);
       }
     }
-    console.log(expected);
-    console.log(str);
+    debug(expected);
+    debug(str);
   }
 });
