@@ -15,9 +15,80 @@
     height: 90px;
     text-align: center;
     line-height: 90px;
-    color: $number-color;
     border: 5px solid $bg-color;
     background-color: $tile-color;
   }
 
+  .number-2 {
+    color: $number-text-color-2;
+    background-color: $number-background-color-2;
+  }
+  .number-4 {
+    color: $number-text-color-4;
+    background-color: $number-background-color-4;
+  }
+  .number-8 {
+    color: $number-text-color-8;
+    background-color: $number-background-color-8;
+  }
+  .number-16 {
+    color: $number-text-color-16;
+    background-color: $number-background-color-16;
+  }
+  .number-32 {
+    color: $number-text-color-32;
+    background-color: $number-background-color-32;
+  }
+  .number-64 {
+    color: $number-text-color-64;
+    background-color: $number-background-color-64;
+  }
+  .number-128 {
+    color: $number-text-color-128;
+    background-color: $number-background-color-128;
+  }
+  .number-256 {
+    color: $number-text-color-256;
+    background-color: $number-background-color-256;
+  }
+  .number-512 {
+    color: $number-text-color-512;
+    background-color: $number-background-color-512;
+  }
+  .number-1024 {
+    color: $number-text-color-1024;
+    background-color: $number-background-color-1024;
+  }
+  .number-2048 {
+    color: $number-text-color-2048;
+    background-color: $number-background-color-2048;
+  }
+  .number-4096 {
+    color: $number-text-color-4096;
+    background-color: $number-background-color-4096;
+  }
+  .number-8192 {
+    color: $number-text-color-8192;
+    background-color: $number-background-color-8192;
+  }
+  .number-16384 {
+    color: $number-text-color-16384;
+    background-color: $number-background-color-16384;
+  }
+  .number-32768 {
+    color: $number-text-color-32768;
+    background-color: $number-background-color-32768;
+  }
+  .number-65536 {
+    color: $number-text-color-65536;
+    background-color: $number-background-color-65536;
+  }
+  .number-131072 {
+    color: $number-text-color-131072;
+    background-color: $number-background-color-131072;
+  }
+  .number-262144 {
+    color: $number-text-color-262144;
+    background-color: $number-background-color-262144;
+  }
 }
