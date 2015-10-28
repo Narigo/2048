@@ -210,6 +210,7 @@ function isEmptyTile(tile) {
 }
 
 function emptyTile(tile) {
+  tile.classList.remove('number-' + tile.gameData.value);
   tile.innerHTML = '';
   tile.gameData.filled = false;
   tile.gameData.value = 0;
