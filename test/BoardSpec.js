@@ -5,7 +5,8 @@ describe('Board', function () {
   var board;
   var debugMode = false;
 
-  var debug = (debugMode ? console.log : function() {});
+  var debug = (debugMode ? console.log : function () {
+  });
 
   // inject the HTML fixture for the tests
   var fixture = '<div id="game">' +
@@ -592,6 +593,24 @@ describe('Board', function () {
       ]);
     });
 
+  });
+
+  describe('Moving multiple times', function () {
+    it('should only have keep a single number class', function () {
+      fillBoardValues([
+        [2, 2, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+
+      board.moveLeft();
+      board.moveRight();
+
+      for (var i = 0; i < 16; i++) {
+        expect(board.getTile(i).className).not.toContain('number-2');
+      }
+    });
   });
 
   function fillBoardValues(filledBoard) {
