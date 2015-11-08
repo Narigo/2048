@@ -76,55 +76,6 @@ describe('Board', function () {
     }
   });
 
-  it('can tell whether a move on x-axis is possible', function () {
-    board.fillTile(board.getTile(0), 2);
-    expect(board.isMoveXPossible()).toBe(true);
-    board.fillTile(board.getTile(1), 4);
-    board.fillTile(board.getTile(2), 8);
-    board.fillTile(board.getTile(3), 16);
-    expect(board.isMoveXPossible()).toBe(false);
-    board.fillTile(board.getTile(1), 2);
-    expect(board.isMoveXPossible()).toBe(true);
-  });
-
-  it('can tell whether a move on y-axis is possible', function () {
-    board.fillTile(board.getTile(0), 2);
-    expect(board.isMoveYPossible()).toBe(true);
-    board.fillTile(board.getTile(4), 4);
-    board.fillTile(board.getTile(8), 8);
-    board.fillTile(board.getTile(12), 16);
-    expect(board.isMoveYPossible()).toBe(false);
-    board.fillTile(board.getTile(4), 2);
-    expect(board.isMoveYPossible()).toBe(true);
-  });
-
-  it('can tell whether a move on y-axis is possible', function () {
-    fillBoardValues([
-      [4, 0, 0, 0],
-      [8, 4, 0, 0],
-      [16, 2, 0, 4],
-      [128, 8, 4, 0]
-    ]);
-    showBoard(board);
-    expect(board.isMoveYPossible()).toBe(true);
-    board.fillTile(board.getTile(15), 16);
-    showBoard(board);
-    expect(board.isMoveYPossible()).toBe(true);
-  });
-
-  it('is over when no more moves are possible and the board is not empty', function () {
-    expect(board.getEmptyCells().length).toBe(16);
-    expect(board.isMoveXPossible()).toBe(false);
-    expect(board.isMoveYPossible()).toBe(false);
-    expect(board.isGameOver()).toBe(false);
-    for (var i = 1; i < 17; i++) {
-      board.fillTile(board.getTile(i - 1), Math.pow(2, i));
-    }
-    expect(board.isMoveXPossible()).toBe(false);
-    expect(board.isMoveYPossible()).toBe(false);
-    expect(board.isGameOver()).toBe(true);
-  });
-
   it('has the correct amount of empty cells after left merge', function () {
     expect(board.getEmptyCells().length).toBe(16);
 
@@ -145,6 +96,117 @@ describe('Board', function () {
 
     board.moveRight();
     expect(board.getEmptyCells().length).toBe(15);
+  });
+
+  describe('possible moves', function () {
+    it('can tell whether a move on x-axis is possible', function () {
+      board.fillTile(board.getTile(0), 2);
+      expect(board.isMoveXPossible()).toBe(true);
+      board.fillTile(board.getTile(1), 4);
+      board.fillTile(board.getTile(2), 8);
+      board.fillTile(board.getTile(3), 16);
+      expect(board.isMoveXPossible()).toBe(false);
+      board.fillTile(board.getTile(1), 2);
+      expect(board.isMoveXPossible()).toBe(true);
+    });
+
+    it('can tell whether a move on y-axis is possible', function () {
+      board.fillTile(board.getTile(0), 2);
+      expect(board.isMoveYPossible()).toBe(true);
+      board.fillTile(board.getTile(4), 4);
+      board.fillTile(board.getTile(8), 8);
+      board.fillTile(board.getTile(12), 16);
+      expect(board.isMoveYPossible()).toBe(false);
+      board.fillTile(board.getTile(4), 2);
+      expect(board.isMoveYPossible()).toBe(true);
+    });
+
+    it('can tell whether a move on y-axis is possible', function () {
+      fillBoardValues([
+        [4, 0, 0, 0],
+        [8, 4, 0, 0],
+        [16, 2, 0, 4],
+        [128, 8, 4, 0]
+      ]);
+      showBoard(board);
+      expect(board.isMoveYPossible()).toBe(true);
+      board.fillTile(board.getTile(15), 16);
+      showBoard(board);
+      expect(board.isMoveYPossible()).toBe(true);
+    });
+
+    it('is over when no more moves are possible and the board is not empty', function () {
+      expect(board.getEmptyCells().length).toBe(16);
+      expect(board.isMoveXPossible()).toBe(false);
+      expect(board.isMoveYPossible()).toBe(false);
+      expect(board.isGameOver()).toBe(false);
+      for (var i = 1; i < 17; i++) {
+        board.fillTile(board.getTile(i - 1), Math.pow(2, i));
+      }
+      expect(board.isMoveXPossible()).toBe(false);
+      expect(board.isMoveYPossible()).toBe(false);
+      expect(board.isGameOver()).toBe(true);
+    });
+
+    it('can tell if moves are possible 1', function() {
+      fillBoardValues([
+        [16, 8, 4, 2],
+        [16, 8, 4, 2],
+        [16, 8, 4, 2],
+        [16, 8, 4, 2]
+      ]);
+
+      expect(board.isMoveLeftPossible()).toBe(false);
+      expect(board.isMoveRightPossible()).toBe(false);
+
+      expect(board.isMoveDownPossible()).toBe(true);
+      expect(board.isMoveUpPossible()).toBe(true);
+    });
+
+    it('can tell if moves are possible 2', function() {
+      fillBoardValues([
+        [2, 2, 2, 2],
+        [4, 4, 4, 4],
+        [8, 8, 8, 8],
+        [16, 16, 16, 16]
+      ]);
+
+      expect(board.isMoveLeftPossible()).toBe(true);
+      expect(board.isMoveRightPossible()).toBe(true);
+
+      expect(board.isMoveDownPossible()).toBe(false);
+      expect(board.isMoveUpPossible()).toBe(false);
+    });
+
+    it('can tell if moves are possible 3', function() {
+      fillBoardValues([
+        [0, 0, 0, 0],
+        [2, 0, 0, 0],
+        [4, 2, 0, 0],
+        [8, 4, 2, 0]
+      ]);
+
+      expect(board.isMoveLeftPossible()).toBe(false);
+      expect(board.isMoveRightPossible()).toBe(true);
+
+      expect(board.isMoveDownPossible()).toBe(false);
+      expect(board.isMoveUpPossible()).toBe(true);
+    });
+
+    it('can tell if moves are possible 4', function() {
+      fillBoardValues([
+        [0, 0, 0, 0],
+        [0, 0, 0, 2],
+        [0, 0, 2, 4],
+        [0, 2, 4, 8]
+      ]);
+
+      expect(board.isMoveLeftPossible()).toBe(true);
+      expect(board.isMoveRightPossible()).toBe(false);
+
+      expect(board.isMoveDownPossible()).toBe(false);
+      expect(board.isMoveUpPossible()).toBe(true);
+    });
   });
 
   describe('Move/merge right', function () {

@@ -59,6 +59,82 @@ Board.prototype.getTile = function (id) {
   return this._board[id % 4][Math.floor(id / 4)];
 };
 
+Board.prototype.isMoveLeftPossible = function () {
+  var tile1, tile2, x, y;
+  for (y = 0; y < 4; y++) {
+    x = 0;
+    tile1 = this.getTile(y * 4 + x);
+    for (x = 1; x < 4; x++) {
+      tile2 = this.getTile(y * 4 + x);
+      if (
+        (tile1.gameData.value === 0 && tile2.gameData.value !== 0)
+        || (tile1.gameData.value !== 0 && tile1.gameData.value === tile2.gameData.value)
+      ) {
+        return true;
+      }
+      tile1 = tile2;
+    }
+  }
+  return false;
+};
+
+Board.prototype.isMoveRightPossible = function () {
+  var tile1, tile2, x, y;
+  for (y = 0; y < 4; y++) {
+    x = 3;
+    tile1 = this.getTile(y * 4 + x);
+    for (x = 2; x >= 0; x--) {
+      tile2 = this.getTile(y * 4 + x);
+      if (
+        (tile1.gameData.value === 0 && tile2.gameData.value !== 0)
+        || (tile1.gameData.value !== 0 && tile1.gameData.value === tile2.gameData.value)
+      ) {
+        return true;
+      }
+      tile1 = tile2;
+    }
+  }
+  return false;
+};
+
+Board.prototype.isMoveUpPossible = function () {
+  var tile1, tile2, x, y;
+  for (x = 0; x < 4; x++) {
+    y = 0;
+    tile1 = this.getTile(y * 4 + x);
+    for (y = 1; y < 4; y++) {
+      tile2 = this.getTile(y * 4 + x);
+      if (
+        (tile1.gameData.value === 0 && tile2.gameData.value !== 0)
+        || (tile1.gameData.value !== 0 && tile1.gameData.value === tile2.gameData.value)
+      ) {
+        return true;
+      }
+      tile1 = tile2;
+    }
+  }
+  return false;
+};
+
+Board.prototype.isMoveDownPossible = function () {
+  var tile1, tile2, x, y;
+  for (x = 0; x < 4; x++) {
+    y = 3;
+    tile1 = this.getTile(y * 4 + x);
+    for (y = 2; y >= 0; y--) {
+      tile2 = this.getTile(y * 4 + x);
+      if (
+        (tile1.gameData.value === 0 && tile2.gameData.value !== 0)
+        || (tile1.gameData.value !== 0 && tile1.gameData.value === tile2.gameData.value)
+      ) {
+        return true;
+      }
+      tile1 = tile2;
+    }
+  }
+  return false;
+};
+
 Board.prototype.isMoveXPossible = function () {
   var data, i, oldData, tile;
   var oldTile = this.getTile(0);
