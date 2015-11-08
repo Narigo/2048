@@ -596,7 +596,7 @@ describe('Board', function () {
   });
 
   describe('Moving multiple times', function () {
-    it('should only have keep a single number class', function () {
+    it('keeps a single number class', function () {
       fillBoardValues([
         [2, 2, 0, 0],
         [0, 0, 0, 0],

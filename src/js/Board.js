@@ -48,7 +48,7 @@ Board.prototype.fillTile = function (tile, number) {
   tile.gameData.filled = true;
   tile.gameData.value = number;
 
-  tile.classList.remove();
+  tile.className = 'tile';
   tile.classList.add('number-' + number);
   tile.innerHTML = number;
 
