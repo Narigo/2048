@@ -136,39 +136,11 @@ Board.prototype.isMoveDownPossible = function () {
 };
 
 Board.prototype.isMoveXPossible = function () {
-  var data, i, oldData, tile;
-  var oldTile = this.getTile(0);
-  for (i = 1; i < 16; i++) {
-    tile = this.getTile(i);
-    oldData = oldTile.gameData;
-    data = tile.gameData;
-    if (data.y === oldData.y &&
-      ((data.value !== 0 && data.value === oldData.value) ||
-      (data.value === 0 && oldData.value !== 0) ||
-      (data.value !== 0 && oldData.value === 0))) {
-      return true;
-    }
-    oldTile = tile;
-  }
-  return false;
+  return this.isMoveLeftPossible() || this.isMoveRightPossible();
 };
 
 Board.prototype.isMoveYPossible = function () {
-  var data, i, oldData, tile;
-  var oldTile = this.getTile(0);
-  for (i = 1; i < 16; i++) {
-    tile = i === 15 ? this.getTile(15) : this.getTile((i * 4) % 15);
-    oldData = oldTile.gameData;
-    data = tile.gameData;
-    if (data.x === oldData.x &&
-      ((data.value !== 0 && data.value === oldData.value) ||
-      (data.value === 0 && oldData.value !== 0) ||
-      (data.value !== 0 && oldData.value === 0))) {
-      return true;
-    }
-    oldTile = tile;
-  }
-  return false;
+  return this.isMoveUpPossible() || this.isMoveDownPossible();
 };
 
 Board.prototype.moveRight = function () {
