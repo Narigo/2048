@@ -66,10 +66,7 @@ Board.prototype.isMoveLeftPossible = function () {
     tile1 = this.getTile(y * 4 + x);
     for (x = 1; x < 4; x++) {
       tile2 = this.getTile(y * 4 + x);
-      if (
-        (tile1.gameData.value === 0 && tile2.gameData.value !== 0)
-        || (tile1.gameData.value !== 0 && tile1.gameData.value === tile2.gameData.value)
-      ) {
+      if (checkMovePossible(tile1, tile2)) {
         return true;
       }
       tile1 = tile2;
@@ -85,10 +82,7 @@ Board.prototype.isMoveRightPossible = function () {
     tile1 = this.getTile(y * 4 + x);
     for (x = 2; x >= 0; x--) {
       tile2 = this.getTile(y * 4 + x);
-      if (
-        (tile1.gameData.value === 0 && tile2.gameData.value !== 0)
-        || (tile1.gameData.value !== 0 && tile1.gameData.value === tile2.gameData.value)
-      ) {
+      if (checkMovePossible(tile1, tile2)) {
         return true;
       }
       tile1 = tile2;
@@ -104,10 +98,7 @@ Board.prototype.isMoveUpPossible = function () {
     tile1 = this.getTile(y * 4 + x);
     for (y = 1; y < 4; y++) {
       tile2 = this.getTile(y * 4 + x);
-      if (
-        (tile1.gameData.value === 0 && tile2.gameData.value !== 0)
-        || (tile1.gameData.value !== 0 && tile1.gameData.value === tile2.gameData.value)
-      ) {
+      if (checkMovePossible(tile1, tile2)) {
         return true;
       }
       tile1 = tile2;
@@ -116,6 +107,11 @@ Board.prototype.isMoveUpPossible = function () {
   return false;
 };
 
+function checkMovePossible(tile1, tile2) {
+  return (tile1.gameData.value === 0 && tile2.gameData.value !== 0)
+    || (tile1.gameData.value !== 0 && tile1.gameData.value === tile2.gameData.value);
+}
+
 Board.prototype.isMoveDownPossible = function () {
   var tile1, tile2, x, y;
   for (x = 0; x < 4; x++) {
@@ -123,10 +119,7 @@ Board.prototype.isMoveDownPossible = function () {
     tile1 = this.getTile(y * 4 + x);
     for (y = 2; y >= 0; y--) {
       tile2 = this.getTile(y * 4 + x);
-      if (
-        (tile1.gameData.value === 0 && tile2.gameData.value !== 0)
-        || (tile1.gameData.value !== 0 && tile1.gameData.value === tile2.gameData.value)
-      ) {
+      if (checkMovePossible(tile1, tile2)) {
         return true;
       }
       tile1 = tile2;
