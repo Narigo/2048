@@ -148,7 +148,7 @@ Board.prototype.moveRight = function () {
 
         // current tile not empty
         if (isEmptyTile(tile)) {
-          this.moveTile(this._board[x][y], tile);
+          this.mergeTile(this._board[x][y], tile);
         } else if (tile.gameData.value === this._board[x][y].gameData.value) {
           this.mergeTile(this._board[x][y], tile);
           tile = this._board[x][y];
@@ -172,7 +172,7 @@ Board.prototype.moveLeft = function () {
 
         // current tile not empty
         if (isEmptyTile(tile)) {
-          this.moveTile(this._board[x][y], tile);
+          this.mergeTile(this._board[x][y], tile);
         } else if (tile.gameData.value === this._board[x][y].gameData.value) {
           this.mergeTile(this._board[x][y], tile);
           tile = this._board[x][y];
@@ -196,7 +196,7 @@ Board.prototype.moveUp = function () {
 
         // current tile not empty
         if (isEmptyTile(tile)) {
-          this.moveTile(this._board[x][y], tile);
+          this.mergeTile(this._board[x][y], tile);
         } else if (tile.gameData.value === this._board[x][y].gameData.value) {
           this.mergeTile(this._board[x][y], tile);
           tile = this._board[x][y];
@@ -220,7 +220,7 @@ Board.prototype.moveDown = function () {
 
         // current tile not empty
         if (isEmptyTile(tile)) {
-          this.moveTile(this._board[x][y], tile);
+          this.mergeTile(this._board[x][y], tile);
         } else if (tile.gameData.value === this._board[x][y].gameData.value) {
           this.mergeTile(this._board[x][y], tile);
           tile = this._board[x][y];
@@ -238,11 +238,6 @@ Board.prototype.isGameOver = function () {
 
 Board.prototype.mergeTile = function (a, b) {
   this.fillTile(b, b.gameData.value + a.gameData.value);
-  emptyTile(a);
-};
-
-Board.prototype.moveTile = function (a, b) {
-  this.fillTile(b, a.gameData.value);
   emptyTile(a);
 };
 
