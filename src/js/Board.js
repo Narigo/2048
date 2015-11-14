@@ -137,99 +137,86 @@ Board.prototype.isMoveYPossible = function () {
 };
 
 Board.prototype.moveRight = function () {
-  var mostRightX, tile, x, y;
-  for (y = 0; y < 4; y++) {
-    for (mostRightX = 3; mostRightX >= 0; mostRightX--) {
-      tile = this._board[mostRightX][y];
-      for (x = mostRightX - 1; x >= 0; x--) {
-        if (isEmptyTile(this._board[x][y])) {
-          continue;
-        }
-
-        // current tile not empty
-        if (isEmptyTile(tile)) {
-          this.mergeTile(this._board[x][y], tile);
-        } else if (tile.gameData.value === this._board[x][y].gameData.value) {
-          this.mergeTile(this._board[x][y], tile);
-          tile = this._board[x][y];
-        } else {
-          break;
-        }
-      }
+  var data = {
+    xMod : -1,
+    yMod : 0,
+    axis : 'y'
+  };
+  for (data.y = 0; data.y < 4; data.y += 1) {
+    for (data.x2 = 3; data.x2 >= 0; data.x2 += -1) {
+      this._innerForAxis(data, function (data) {
+        return data.x >= 0;
+      });
     }
   }
 };
 
 Board.prototype.moveLeft = function () {
-  var mostLeftX, tile, x, y;
-  for (y = 0; y < 4; y++) {
-    for (mostLeftX = 0; mostLeftX <= 3; mostLeftX++) {
-      tile = this._board[mostLeftX][y];
-      for (x = mostLeftX + 1; x <= 3; x++) {
-        if (isEmptyTile(this._board[x][y])) {
-          continue;
-        }
-
-        // current tile not empty
-        if (isEmptyTile(tile)) {
-          this.mergeTile(this._board[x][y], tile);
-        } else if (tile.gameData.value === this._board[x][y].gameData.value) {
-          this.mergeTile(this._board[x][y], tile);
-          tile = this._board[x][y];
-        } else {
-          break;
-        }
-      }
+  var data = {
+    xMod : 1,
+    yMod : 0,
+    axis : 'y'
+  };
+  for (data.y = 0; data.y < 4; data.y += 1) {
+    for (data.x2 = 0; data.x2 <= 3; data.x2 += 1) {
+      this._innerForAxis(data, function (data) {
+        return data.x <= 3;
+      });
     }
   }
 };
 
 Board.prototype.moveUp = function () {
-  var topY, tile, x, y;
-  for (x = 0; x < 4; x++) {
-    for (topY = 0; topY <= 3; topY++) {
-      tile = this._board[x][topY];
-      for (y = topY + 1; y <= 3; y++) {
-        if (isEmptyTile(this._board[x][y])) {
-          continue;
-        }
-
-        // current tile not empty
-        if (isEmptyTile(tile)) {
-          this.mergeTile(this._board[x][y], tile);
-        } else if (tile.gameData.value === this._board[x][y].gameData.value) {
-          this.mergeTile(this._board[x][y], tile);
-          tile = this._board[x][y];
-        } else {
-          break;
-        }
-      }
+  var data = {
+    xMod : 0,
+    yMod : 1,
+    axis : 'x'
+  };
+  for (data.x = 0; data.x < 4; data.x += 1) {
+    for (data.y2 = 0; data.y2 <= 3; data.y2 += 1) {
+      this._innerForAxis(data, function(data) {
+        return data.y <= 3;
+      });
     }
   }
 };
 
 Board.prototype.moveDown = function () {
-  var bottomY, tile, x, y;
-  for (x = 0; x < 4; x++) {
-    for (bottomY = 3; bottomY >= 0; bottomY--) {
-      tile = this._board[x][bottomY];
-      for (y = bottomY - 1; y >= 0; y--) {
-        if (isEmptyTile(this._board[x][y])) {
-          continue;
-        }
-
-        // current tile not empty
-        if (isEmptyTile(tile)) {
-          this.mergeTile(this._board[x][y], tile);
-        } else if (tile.gameData.value === this._board[x][y].gameData.value) {
-          this.mergeTile(this._board[x][y], tile);
-          tile = this._board[x][y];
-        } else {
-          break;
-        }
-      }
+  var data = {
+    xMod : 0,
+    yMod : -1,
+    axis : 'x'
+  };
+  for (data.x = 0; data.x < 4; data.x += 1) {
+    for (data.y2 = 3; data.y2 >= 0; data.y2 += -1) {
+      this._innerForAxis(data, function(data) {
+        return data.y >= 0;
+      });
     }
   }
+};
+
+Board.prototype._innerForAxis = function (data, check) {
+  data[data.axis + '2'] = data[data.axis];
+  data.x = data.x2 + data.xMod;
+  data.y = data.y2 + data.yMod;
+  data.tile = this._board[data.x2][data.y2];
+  for (; check(data); data.x += data.xMod, data.y += data.yMod) {
+    if (isEmptyTile(this._board[data.x][data.y])) {
+      continue;
+    }
+
+    // current tile not empty
+    if (isEmptyTile(data.tile)) {
+      this.mergeTile(this._board[data.x][data.y], data.tile);
+    } else if (data.tile.gameData.value === this._board[data.x][data.y].gameData.value) {
+      this.mergeTile(this._board[data.x][data.y], data.tile);
+      data.tile = this._board[data.x][data.y];
+    } else {
+      break;
+    }
+  }
+  return data;
 };
 
 Board.prototype.isGameOver = function () {
