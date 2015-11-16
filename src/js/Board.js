@@ -1,7 +1,14 @@
-function Board(tiles) {
+var defaults = {
+  history : 20
+};
+
+function Board(tiles, options) {
   var self = this;
+  var config = options || defaults;
   this._board = [];
   this._gameOver = false;
+  this._history = [];
+  this._maxHistory = config.history || defaults.history;
 
   [].map.call(tiles, function (tile) {
     var ids = /^tile-(\d)(\d)$/.exec(tile.id);
@@ -137,61 +144,73 @@ Board.prototype.isMoveYPossible = function () {
 };
 
 Board.prototype.moveRight = function () {
-  var data = {
-    xMod : -1,
-    yMod : 0,
-    axis : 'y'
-  };
-  for (data.y = 0; data.y < 4; data.y += 1) {
-    for (data.x2 = 3; data.x2 >= 0; data.x2 += -1) {
-      this._innerForAxis(data, function (data) {
-        return data.x >= 0;
-      });
+  if (this.isMoveRightPossible()) {
+    this._history.push(this.getCurrentState());
+    var data = {
+      xMod : -1,
+      yMod : 0,
+      axis : 'y'
+    };
+    for (data.y = 0; data.y < 4; data.y += 1) {
+      for (data.x2 = 3; data.x2 >= 0; data.x2 += -1) {
+        this._innerForAxis(data, function (data) {
+          return data.x >= 0;
+        });
+      }
     }
   }
 };
 
 Board.prototype.moveLeft = function () {
-  var data = {
-    xMod : 1,
-    yMod : 0,
-    axis : 'y'
-  };
-  for (data.y = 0; data.y < 4; data.y += 1) {
-    for (data.x2 = 0; data.x2 <= 3; data.x2 += 1) {
-      this._innerForAxis(data, function (data) {
-        return data.x <= 3;
-      });
+  if (this.isMoveLeftPossible()) {
+    this._history.push(this.getCurrentState());
+    var data = {
+      xMod : 1,
+      yMod : 0,
+      axis : 'y'
+    };
+    for (data.y = 0; data.y < 4; data.y += 1) {
+      for (data.x2 = 0; data.x2 <= 3; data.x2 += 1) {
+        this._innerForAxis(data, function (data) {
+          return data.x <= 3;
+        });
+      }
     }
   }
 };
 
 Board.prototype.moveUp = function () {
-  var data = {
-    xMod : 0,
-    yMod : 1,
-    axis : 'x'
-  };
-  for (data.x = 0; data.x < 4; data.x += 1) {
-    for (data.y2 = 0; data.y2 <= 3; data.y2 += 1) {
-      this._innerForAxis(data, function(data) {
-        return data.y <= 3;
-      });
+  if (this.isMoveUpPossible()) {
+    this._history.push(this.getCurrentState());
+    var data = {
+      xMod : 0,
+      yMod : 1,
+      axis : 'x'
+    };
+    for (data.x = 0; data.x < 4; data.x += 1) {
+      for (data.y2 = 0; data.y2 <= 3; data.y2 += 1) {
+        this._innerForAxis(data, function (data) {
+          return data.y <= 3;
+        });
+      }
     }
   }
 };
 
 Board.prototype.moveDown = function () {
-  var data = {
-    xMod : 0,
-    yMod : -1,
-    axis : 'x'
-  };
-  for (data.x = 0; data.x < 4; data.x += 1) {
-    for (data.y2 = 3; data.y2 >= 0; data.y2 += -1) {
-      this._innerForAxis(data, function(data) {
-        return data.y >= 0;
-      });
+  if (this.isMoveDownPossible()) {
+    this._history.push(this.getCurrentState());
+    var data = {
+      xMod : 0,
+      yMod : -1,
+      axis : 'x'
+    };
+    for (data.x = 0; data.x < 4; data.x += 1) {
+      for (data.y2 = 3; data.y2 >= 0; data.y2 += -1) {
+        this._innerForAxis(data, function (data) {
+          return data.y >= 0;
+        });
+      }
     }
   }
 };
@@ -226,6 +245,34 @@ Board.prototype.isGameOver = function () {
 Board.prototype.mergeTile = function (a, b) {
   this.fillTile(b, b.gameData.value + a.gameData.value);
   emptyTile(a);
+};
+
+Board.prototype.undo = function () {
+  //if (this._history.length > 0) {
+  var oldBoard = this._history[this._history.length - 1];
+  this._history = this._history.slice(0, this._history.length - 1);
+  this.fillBoardValues(oldBoard);
+  //}
+};
+
+Board.prototype.getCurrentState = function () {
+  var board = [];
+  for (var y = 0; y < this._board.length; y++) {
+    board[y] = [];
+    for (var x = 0; x < this._board[y].length; x++) {
+      board[y][x] = this._board[x][y].gameData.value;
+    }
+  }
+  return board;
+};
+
+Board.prototype.fillBoardValues = function (filledBoard) {
+  for (var y = 0; y < filledBoard.length; y++) {
+    for (var x = 0; x < filledBoard[y].length; x++) {
+      var id = y * 4 + x;
+      this.fillTile(this._board[id % 4][Math.floor(id / 4)], filledBoard[y][x]);
+    }
+  }
 };
 
 function isEmptyTile(tile) {

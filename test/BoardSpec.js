@@ -148,7 +148,7 @@ describe('Board', function () {
       expect(board.isGameOver()).toBe(true);
     });
 
-    it('can tell if moves are possible 1', function() {
+    it('can tell if moves are possible 1', function () {
       fillBoardValues([
         [16, 8, 4, 2],
         [16, 8, 4, 2],
@@ -163,7 +163,7 @@ describe('Board', function () {
       expect(board.isMoveUpPossible()).toBe(true);
     });
 
-    it('can tell if moves are possible 2', function() {
+    it('can tell if moves are possible 2', function () {
       fillBoardValues([
         [2, 2, 2, 2],
         [4, 4, 4, 4],
@@ -178,7 +178,7 @@ describe('Board', function () {
       expect(board.isMoveUpPossible()).toBe(false);
     });
 
-    it('can tell if moves are possible 3', function() {
+    it('can tell if moves are possible 3', function () {
       fillBoardValues([
         [0, 0, 0, 0],
         [2, 0, 0, 0],
@@ -193,7 +193,7 @@ describe('Board', function () {
       expect(board.isMoveUpPossible()).toBe(true);
     });
 
-    it('can tell if moves are possible 4', function() {
+    it('can tell if moves are possible 4', function () {
       fillBoardValues([
         [0, 0, 0, 0],
         [0, 0, 0, 2],
@@ -672,6 +672,125 @@ describe('Board', function () {
       for (var i = 0; i < 16; i++) {
         expect(board.getTile(i).className).not.toContain('number-2');
       }
+    });
+  });
+
+  describe('Undo button', function () {
+    it('does not change the board if a movement was impossible', function () {
+      fillBoardValues([
+        [0, 0, 0, 2],
+        [0, 0, 0, 2],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+      board.moveRight();
+      expect(board.undo).toThrow();
+
+      checkBoardValues([
+        [0, 0, 0, 2],
+        [0, 0, 0, 2],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+    });
+
+    it('gets back into an earlier state', function () {
+      fillBoardValues([
+        [0, 0, 0, 2],
+        [0, 0, 0, 2],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+
+      board.moveLeft();
+      board.undo();
+
+      checkBoardValues([
+        [0, 0, 0, 2],
+        [0, 0, 0, 2],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+    });
+
+    it('gets back into an earlier states', function () {
+      fillBoardValues([
+        [0, 0, 0, 2],
+        [0, 0, 0, 2],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+
+      board.moveLeft();
+      board.moveDown();
+      board.moveRight();
+      board.moveUp();
+
+      checkBoardValues([
+        [0, 0, 0, 4],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+
+      board.undo();
+
+      checkBoardValues([
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 4]
+      ]);
+
+      board.undo();
+
+      checkBoardValues([
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [4, 0, 0, 0]
+      ]);
+
+      board.undo();
+
+      checkBoardValues([
+        [2, 0, 0, 0],
+        [2, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+    });
+
+    it('can not undo more than moves', function () {
+      fillBoardValues([
+        [0, 0, 0, 2],
+        [0, 0, 0, 2],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+
+      board.moveLeft();
+      board.undo();
+
+      expect(board.undo).toThrow();
+    });
+
+    it('counts only as move if move was possible', function () {
+      fillBoardValues([
+        [0, 0, 0, 2],
+        [0, 0, 0, 2],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+
+      board.moveLeft();
+      board.moveLeft();
+      board.moveRight();
+      board.moveRight();
+      board.undo();
+      board.undo();
+
+      expect(board.undo).toThrow();
     });
   });
 

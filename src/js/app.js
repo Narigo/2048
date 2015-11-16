@@ -10,6 +10,13 @@ board.nextRound();
 
 document.onkeydown = onKeyDown;
 
+var undo = document.getElementById('undoButton');
+undo.onclick = function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  board.undo();
+};
+
 function onKeyDown(e) {
   var event = e || window.event;
   event.preventDefault();
