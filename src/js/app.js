@@ -18,16 +18,16 @@ function onKeyDown(e) {
 
   function move(keyCode) {
     var moved = false;
-    if (keyCode === 37 && board.isMoveXPossible()) {
+    if (keyCode === 37 && board.isMoveLeftPossible()) {
       board.moveLeft();
       moved = true;
-    } else if (keyCode === 38 && board.isMoveYPossible()) {
+    } else if (keyCode === 38 && board.isMoveUpPossible()) {
       board.moveUp();
       moved = true;
-    } else if (keyCode === 39 && board.isMoveXPossible()) {
+    } else if (keyCode === 39 && board.isMoveRightPossible()) {
       board.moveRight();
       moved = true;
-    } else if (keyCode === 40 && board.isMoveYPossible()) {
+    } else if (keyCode === 40 && board.isMoveDownPossible()) {
       board.moveDown();
       moved = true;
     }
