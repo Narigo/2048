@@ -144,98 +144,43 @@ Board.prototype.isMoveYPossible = function () {
 };
 
 Board.prototype.moveRight = function () {
-  if (this.isMoveRightPossible()) {
-    this._history.push(this.getCurrentState());
-    var data = {
-      xMod : -1,
-      yMod : 0,
-      axis : 'y'
-    };
-    for (data.y = 0; data.y < 4; data.y += 1) {
-      for (data.x2 = 3; data.x2 >= 0; data.x2 += -1) {
-        this._innerForAxis(data, function (data) {
-          return data.x >= 0;
-        });
-      }
-    }
-  }
+  this._checkIfPossibleAndMove({
+    xMod : -1,
+    yMod : 0,
+    axis : 'y',
+    axis2 : 'x',
+    direction : 'Right'
+  });
 };
 
 Board.prototype.moveLeft = function () {
-  if (this.isMoveLeftPossible()) {
-    this._history.push(this.getCurrentState());
-    var data = {
-      xMod : 1,
-      yMod : 0,
-      axis : 'y'
-    };
-    for (data.y = 0; data.y < 4; data.y += 1) {
-      for (data.x2 = 0; data.x2 <= 3; data.x2 += 1) {
-        this._innerForAxis(data, function (data) {
-          return data.x <= 3;
-        });
-      }
-    }
-  }
+  this._checkIfPossibleAndMove({
+    xMod : 1,
+    yMod : 0,
+    axis : 'y',
+    axis2 : 'x',
+    direction : 'Left'
+  });
 };
 
 Board.prototype.moveUp = function () {
-  if (this.isMoveUpPossible()) {
-    this._history.push(this.getCurrentState());
-    var data = {
-      xMod : 0,
-      yMod : 1,
-      axis : 'x'
-    };
-    for (data.x = 0; data.x < 4; data.x += 1) {
-      for (data.y2 = 0; data.y2 <= 3; data.y2 += 1) {
-        this._innerForAxis(data, function (data) {
-          return data.y <= 3;
-        });
-      }
-    }
-  }
+  this._checkIfPossibleAndMove({
+    xMod : 0,
+    yMod : 1,
+    axis : 'x',
+    axis2 : 'y',
+    direction : 'Up'
+  });
 };
 
 Board.prototype.moveDown = function () {
-  if (this.isMoveDownPossible()) {
-    this._history.push(this.getCurrentState());
-    var data = {
-      xMod : 0,
-      yMod : -1,
-      axis : 'x'
-    };
-    for (data.x = 0; data.x < 4; data.x += 1) {
-      for (data.y2 = 3; data.y2 >= 0; data.y2 += -1) {
-        this._innerForAxis(data, function (data) {
-          return data.y >= 0;
-        });
-      }
-    }
-  }
-};
-
-Board.prototype._innerForAxis = function (data, check) {
-  data[data.axis + '2'] = data[data.axis];
-  data.x = data.x2 + data.xMod;
-  data.y = data.y2 + data.yMod;
-  data.tile = this._board[data.x2][data.y2];
-  for (; check(data); data.x += data.xMod, data.y += data.yMod) {
-    if (isEmptyTile(this._board[data.x][data.y])) {
-      continue;
-    }
-
-    // current tile not empty
-    if (isEmptyTile(data.tile)) {
-      this.mergeTile(this._board[data.x][data.y], data.tile);
-    } else if (data.tile.gameData.value === this._board[data.x][data.y].gameData.value) {
-      this.mergeTile(this._board[data.x][data.y], data.tile);
-      data.tile = this._board[data.x][data.y];
-    } else {
-      break;
-    }
-  }
-  return data;
+  this._checkIfPossibleAndMove({
+    xMod : 0,
+    yMod : -1,
+    axis : 'x',
+    axis2 : 'y',
+    direction : 'Down'
+  });
 };
 
 Board.prototype.isGameOver = function () {
@@ -271,6 +216,54 @@ Board.prototype.fillBoardValues = function (filledBoard) {
     for (var x = 0; x < filledBoard[y].length; x++) {
       var id = y * 4 + x;
       this.fillTile(this._board[id % 4][Math.floor(id / 4)], filledBoard[y][x]);
+    }
+  }
+};
+
+Board.prototype._checkIfPossibleAndMove = function (data) {
+  if (this['isMove' + data.direction + 'Possible']()) {
+    this._history.push(this.getCurrentState());
+    this._moveData(data);
+  }
+};
+
+Board.prototype._moveData = function (data) {
+  for (data[data.axis] = 0; data[data.axis] < 4; data[data.axis] += 1) {
+    if (data.xMod + data.yMod < 0) {
+      for (data[data.axis2 + '2'] = 3; data[data.axis2 + '2'] >= 0; data[data.axis2 + '2'] += -1) {
+        this._moveInner(data, function (data) {
+          return data[data.axis2] >= 0;
+        });
+      }
+    } else {
+      for (data[data.axis2 + '2'] = 0; data[data.axis2 + '2'] < 4; data[data.axis2 + '2'] += 1) {
+        this._moveInner(data, function (data) {
+          return data[data.axis2] < 4;
+        });
+      }
+    }
+  }
+};
+
+Board.prototype._moveInner = function (data, check) {
+  data[data.axis + '2'] = data[data.axis];
+  data.x = data.x2 + data.xMod;
+  data.y = data.y2 + data.yMod;
+  data.tile = this._board[data.x2][data.y2];
+
+  for (; check(data); data.x += data.xMod, data.y += data.yMod) {
+    if (isEmptyTile(this._board[data.x][data.y])) {
+      continue;
+    }
+
+    // current tile not empty
+    if (isEmptyTile(data.tile)) {
+      this.mergeTile(this._board[data.x][data.y], data.tile);
+    } else if (data.tile.gameData.value === this._board[data.x][data.y].gameData.value) {
+      this.mergeTile(this._board[data.x][data.y], data.tile);
+      data.tile = this._board[data.x][data.y];
+    } else {
+      break;
     }
   }
 };
