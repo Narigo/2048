@@ -792,6 +792,54 @@ describe('Board', function () {
 
       expect(board.undo).toThrow();
     });
+
+    it('should only undo as much as we configured', function () {
+      var game = document.querySelectorAll('.tile');
+      board = new Board(game, {
+        maxUndo : 5
+      });
+
+      fillBoardValues([
+        [2, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+
+      board.moveDown();
+      board.moveRight();
+      board.fillTile(board.getTile(0), 2);
+      board.moveDown();
+      board.moveRight();
+      board.fillTile(board.getTile(0), 4);
+      board.moveDown();
+      board.moveRight();
+      board.fillTile(board.getTile(0), 8);
+      board.moveDown();
+      board.moveRight();
+
+      checkBoardValues([
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 16]
+      ]);
+
+      board.undo();
+      board.undo();
+      board.undo();
+      board.undo();
+      board.undo();
+      board.undo();
+      board.undo();
+
+      checkBoardValues([
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [2, 0, 0, 2]
+      ]);
+    });
   });
 
   function fillBoardValues(filledBoard) {
