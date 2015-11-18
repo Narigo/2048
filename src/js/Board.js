@@ -193,11 +193,9 @@ Board.prototype.mergeTile = function (a, b) {
 };
 
 Board.prototype.undo = function () {
-  //if (this._history.length > 0) {
   var oldBoard = this._history[this._history.length - 1];
   this._history = this._history.slice(0, this._history.length - 1);
   this.fillBoardValues(oldBoard);
-  //}
 };
 
 Board.prototype.getCurrentState = function () {
