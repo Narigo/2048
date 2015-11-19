@@ -148,6 +148,23 @@ describe('Board', function () {
       expect(board.isGameOver()).toBe(true);
     });
 
+    it('is over if there are no more moves left', function() {
+      fillBoardValues([
+        [  2,  8,  4,  2],
+        [ 64, 16,  8,  2],
+        [128, 64, 16,  8],
+        [256,128, 32, 16]
+      ]);
+      board.moveDown();
+      checkBoardValues([
+        [  2,  8,  4,  0],
+        [ 64, 16,  8,  4],
+        [128, 64, 16,  8],
+        [256,128, 32, 16]
+      ]);
+      expect(board.isGameOver()).toBe(false);
+    });
+
     it('can tell if moves are possible 1', function () {
       fillBoardValues([
         [16, 8, 4, 2],

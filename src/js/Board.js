@@ -1,14 +1,13 @@
 var defaults = {
-  history : 20
+  maxUndo : 20
 };
 
 function Board(tiles, options) {
   var self = this;
   var config = options || defaults;
   this._board = [];
-  this._gameOver = false;
   this._history = [];
-  this._maxHistory = config.history || defaults.history;
+  this._maxHistory = config.maxUndo || defaults.maxUndo;
 
   [].map.call(tiles, function (tile) {
     var ids = /^tile-(\d)(\d)$/.exec(tile.id);
@@ -42,7 +41,6 @@ Board.prototype.getEmptyCells = function () {
 Board.prototype.nextRound = function () {
   var emptyCells = this.getEmptyCells();
   if (emptyCells.length === 0) {
-    this._gameOver = true;
     return alert('game over');
   }
 
@@ -58,8 +56,6 @@ Board.prototype.fillTile = function (tile, number) {
   tile.className = 'tile';
   tile.classList.add('number-' + number);
   tile.innerHTML = number;
-
-  this._gameOver = checkGameOver(this);
 };
 
 Board.prototype.getTile = function (id) {
@@ -184,7 +180,7 @@ Board.prototype.moveDown = function () {
 };
 
 Board.prototype.isGameOver = function () {
-  return this._gameOver;
+  return !((this.isMoveXPossible() || this.isMoveYPossible()) || this.getEmptyCells().length > 0);
 };
 
 Board.prototype.mergeTile = function (a, b) {
@@ -193,9 +189,11 @@ Board.prototype.mergeTile = function (a, b) {
 };
 
 Board.prototype.undo = function () {
-  var oldBoard = this._history[this._history.length - 1];
-  this._history = this._history.slice(0, this._history.length - 1);
-  this.fillBoardValues(oldBoard);
+  if (this._history.length > 0) {
+    var oldBoard = this._history[this._history.length - 1];
+    this._history = this._history.slice(0, this._history.length - 1);
+    this.fillBoardValues(oldBoard);
+  }
 };
 
 Board.prototype.getCurrentState = function () {
@@ -220,6 +218,9 @@ Board.prototype.fillBoardValues = function (filledBoard) {
 
 Board.prototype._checkIfPossibleAndMove = function (data) {
   if (this['isMove' + data.direction + 'Possible']()) {
+    if (this._history.length >= this._maxHistory) {
+      this._history.shift();
+    }
     this._history.push(this.getCurrentState());
     this._moveData(data);
   }
@@ -275,10 +276,6 @@ function emptyTile(tile) {
   tile.innerHTML = '';
   tile.gameData.filled = false;
   tile.gameData.value = 0;
-}
-
-function checkGameOver(board) {
-  return !(board.isMoveXPossible() || board.isMoveYPossible());
 }
 
 module.exports = Board;
