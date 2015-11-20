@@ -2,20 +2,41 @@ var Board = require('./Board');
 
 var tiles = document.querySelectorAll('.tile');
 
-var board = new Board(tiles);
-
-console.log(board);
-board.nextRound();
-board.nextRound();
+var board;
 
 document.onkeydown = onKeyDown;
 
-var undo = document.getElementById('undoButton');
-undo.onclick = function(e) {
+var undoBtn = document.getElementById('undoButton');
+undoBtn.onclick = function(e) {
   e.preventDefault();
   e.stopPropagation();
   board.undo();
 };
+
+var resetBtn = document.getElementById('resetButton');
+resetBtn.onclick = function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  reset();
+};
+
+reset();
+
+function reset() {
+  console.log('resetting');
+  if (board) {
+    board.fillBoardValues([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0]
+    ]);
+  }
+  board = new Board(tiles);
+
+  board.nextRound();
+  board.nextRound();
+}
 
 function onKeyDown(e) {
   var event = e || window.event;

@@ -54,8 +54,12 @@ Board.prototype.fillTile = function (tile, number) {
   tile.gameData.value = number;
 
   tile.className = 'tile';
-  tile.classList.add('number-' + number);
-  tile.innerHTML = number;
+  if (number === 0) {
+    tile.innerHTML = '';
+  } else {
+    tile.classList.add('number-' + number);
+    tile.innerHTML = number;
+  }
 };
 
 Board.prototype.getTile = function (id) {
