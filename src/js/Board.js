@@ -7,6 +7,7 @@ function Board(tiles, options) {
   var config = options || defaults;
   this._board = [];
   this._history = [];
+  this._points = 0;
   this._maxHistory = config.maxUndo || defaults.maxUndo;
 
   [].map.call(tiles, function (tile) {
@@ -50,6 +51,7 @@ Board.prototype.nextRound = function () {
 };
 
 Board.prototype.fillTile = function (tile, number) {
+  this._points += number;
   tile.gameData.filled = true;
   tile.gameData.value = number;
 
@@ -269,6 +271,10 @@ Board.prototype._moveInner = function (data, check) {
       break;
     }
   }
+};
+
+Board.prototype.getPoints = function() {
+  return this._points;
 };
 
 function isEmptyTile(tile) {
