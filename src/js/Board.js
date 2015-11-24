@@ -42,7 +42,8 @@ Board.prototype.getEmptyCells = function () {
 Board.prototype.nextRound = function () {
   var emptyCells = this.getEmptyCells();
   if (emptyCells.length === 0) {
-    return alert('game over');
+    console.log('game over!');
+    return false;
   }
 
   var randomCellIdx = Math.floor(Math.random() * emptyCells.length);

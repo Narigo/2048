@@ -692,58 +692,6 @@ describe('Board', function () {
     });
   });
 
-  describe('Points', function() {
-
-    it('does not count any zeros', function() {
-      fillBoardValues([
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
-      ]);
-
-      expect(board.getPoints()).toBe(0);
-    });
-
-    it('counts filled every number', function() {
-      fillBoardValues([
-        [0, 0, 0, 0],
-        [0, 0, 2, 0],
-        [0, 0, 0, 0],
-        [0, 4, 0, 0]
-      ]);
-
-      expect(board.getPoints()).toBe(6);
-    });
-
-    it('should count merges with additional points', function() {
-      fillBoardValues([
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 2, 2]
-      ]);
-      expect(board.getPoints()).toBe(4);
-      board.moveRight();
-
-      expect(board.getPoints()).toBe(8);
-    });
-
-    it('undos when undo was used', function() {
-      fillBoardValues([
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 2, 2]
-      ]);
-      expect(board.getPoints()).toBe(4);
-      board.moveRight();
-      expect(board.getPoints()).toBe(8);
-      board.undo();
-      expect(board.getPoints()).toBe(4);
-    });
-  });
-
   describe('Undo button', function () {
     it('does not change the board if a movement was impossible', function () {
       fillBoardValues([
@@ -868,6 +816,8 @@ describe('Board', function () {
         maxUndo : 5
       });
 
+      expect(board._maxHistory).toBe(5);
+
       fillBoardValues([
         [2, 0, 0, 0],
         [0, 0, 0, 0],
@@ -908,6 +858,67 @@ describe('Board', function () {
         [0, 0, 0, 0],
         [2, 0, 0, 2]
       ]);
+    });
+
+    it('should default to 20 when no undo was configured', function() {
+      expect(board._maxHistory).toBe(20);
+
+      var game = document.querySelectorAll('.tile');
+      board = new Board(game, {});
+
+      expect(board._maxHistory).toBe(20);
+    });
+  });
+
+  describe('Points', function() {
+
+    it('does not count any zeros', function() {
+      fillBoardValues([
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ]);
+
+      expect(board.getPoints()).toBe(0);
+    });
+
+    it('counts filled every number', function() {
+      fillBoardValues([
+        [0, 0, 0, 0],
+        [0, 0, 2, 0],
+        [0, 0, 0, 0],
+        [0, 4, 0, 0]
+      ]);
+
+      expect(board.getPoints()).toBe(6);
+    });
+
+    it('should count merges with additional points', function() {
+      fillBoardValues([
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 2, 2]
+      ]);
+      expect(board.getPoints()).toBe(4);
+      board.moveRight();
+
+      expect(board.getPoints()).toBe(8);
+    });
+
+    it('undos when undo was used', function() {
+      fillBoardValues([
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 2, 2]
+      ]);
+      expect(board.getPoints()).toBe(4);
+      board.moveRight();
+      expect(board.getPoints()).toBe(8);
+      board.undo();
+      expect(board.getPoints()).toBe(4);
     });
   });
 
