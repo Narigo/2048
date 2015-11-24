@@ -196,9 +196,10 @@ Board.prototype.mergeTile = function (a, b) {
 
 Board.prototype.undo = function () {
   if (this._history.length > 0) {
-    var oldBoard = this._history[this._history.length - 1];
+    var oldState = this._history[this._history.length - 1];
     this._history = this._history.slice(0, this._history.length - 1);
-    this.fillBoardValues(oldBoard);
+    this.fillBoardValues(oldState.board);
+    this._points = oldState.points;
   }
 };
 
@@ -210,7 +211,7 @@ Board.prototype.getCurrentState = function () {
       board[y][x] = this._board[x][y].gameData.value;
     }
   }
-  return board;
+  return {board : board, points : this._points};
 };
 
 Board.prototype.fillBoardValues = function (filledBoard) {
@@ -273,7 +274,7 @@ Board.prototype._moveInner = function (data, check) {
   }
 };
 
-Board.prototype.getPoints = function() {
+Board.prototype.getPoints = function () {
   return this._points;
 };
 

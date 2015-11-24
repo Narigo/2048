@@ -736,9 +736,10 @@ describe('Board', function () {
         [0, 0, 0, 0],
         [0, 0, 2, 2]
       ]);
+      expect(board.getPoints()).toBe(4);
       board.moveRight();
+      expect(board.getPoints()).toBe(8);
       board.undo();
-
       expect(board.getPoints()).toBe(4);
     });
   });
