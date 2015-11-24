@@ -21,6 +21,7 @@
   "devDependencies": {
     "browser-sync": "^2.9.3",
     "browserify": "^11.1.0",
+    "browserify-istanbul": "^0.2.1",
     "del": "^2.0.2",
     "gulp": "^3.9.0",
     "gulp-gh-pages": "^0.5.2",
@@ -30,6 +31,7 @@
     "karma": "^0.12.31",
     "karma-browserify": "^4.0.0",
     "karma-chrome-launcher": "^0.1.7",
+    "karma-coverage": "^0.5.3",
     "karma-jasmine": "^0.3.5",
     "node-sass": "^3.3.3",
     "vinyl-source-stream": "^1.1.0"
