@@ -42,13 +42,13 @@ Board.prototype.getEmptyCells = function () {
 Board.prototype.nextRound = function () {
   var emptyCells = this.getEmptyCells();
   if (emptyCells.length === 0) {
-    console.log('game over!');
     return false;
   }
 
   var randomCellIdx = Math.floor(Math.random() * emptyCells.length);
   var twoOrFour = Math.random() >= 0.75 ? 4 : 2;
   this.fillTile(emptyCells[randomCellIdx], twoOrFour);
+  return true;
 };
 
 Board.prototype.fillTile = function (tile, number) {

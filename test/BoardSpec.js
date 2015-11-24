@@ -224,6 +224,18 @@ describe('Board', function () {
       expect(board.isMoveDownPossible()).toBe(false);
       expect(board.isMoveUpPossible()).toBe(true);
     });
+
+    it('is telling us if no new tile can be filled', function() {
+      fillBoardValues([
+        [2, 2, 2, 2],
+        [2, 2, 2, 2],
+        [2, 2, 2, 2],
+        [2, 2, 2, 2]
+      ]);
+
+      expect(board.nextRound()).toBe(false);
+    });
+
   });
 
   describe('Move/merge right', function () {
