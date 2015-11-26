@@ -148,19 +148,19 @@ describe('Board', function () {
       expect(board.isGameOver()).toBe(true);
     });
 
-    it('is over if there are no more moves left', function() {
+    it('is over if there are no more moves left', function () {
       fillBoardValues([
-        [  2,  8,  4,  2],
-        [ 64, 16,  8,  2],
-        [128, 64, 16,  8],
-        [256,128, 32, 16]
+        [2, 8, 4, 2],
+        [64, 16, 8, 2],
+        [128, 64, 16, 8],
+        [256, 128, 32, 16]
       ]);
       board.moveDown();
       checkBoardValues([
-        [  2,  8,  4,  0],
-        [ 64, 16,  8,  4],
-        [128, 64, 16,  8],
-        [256,128, 32, 16]
+        [2, 8, 4, 0],
+        [64, 16, 8, 4],
+        [128, 64, 16, 8],
+        [256, 128, 32, 16]
       ]);
       expect(board.isGameOver()).toBe(false);
     });
@@ -225,6 +225,10 @@ describe('Board', function () {
       expect(board.isMoveUpPossible()).toBe(true);
     });
 
+  });
+
+  describe('nextRound', function() {
+
     it('is telling us if no new tile can be filled', function() {
       fillBoardValues([
         [2, 2, 2, 2],
@@ -234,6 +238,31 @@ describe('Board', function () {
       ]);
 
       expect(board.nextRound()).toBe(false);
+    });
+
+    it('is telling us whether tiles can be added', function() {
+      fillBoardValues([
+        [2, 2, 2, 2],
+        [2, 2, 2, 2],
+        [2, 2, 2, 2],
+        [2, 2, 2, 0]
+      ]);
+
+      expect(board.nextRound()).toBe(true);
+      expect(board.nextRound()).toBe(false);
+    });
+
+    it('may fill tiles again after move/merge', function() {
+      fillBoardValues([
+        [2, 2, 2, 2],
+        [2, 2, 2, 2],
+        [2, 2, 2, 2],
+        [2, 2, 2, 2]
+      ]);
+
+      expect(board.nextRound()).toBe(false);
+      board.moveRight();
+      expect(board.nextRound()).toBe(true);
     });
 
   });

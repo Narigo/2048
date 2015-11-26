@@ -53,13 +53,15 @@ Board.prototype.nextRound = function () {
 
 Board.prototype.fillTile = function (tile, number) {
   this._points += number;
-  tile.gameData.filled = true;
-  tile.gameData.value = number;
 
   tile.className = 'tile';
   if (number === 0) {
     tile.innerHTML = '';
+    tile.gameData.filled = false;
+    tile.gameData.value = 0;
   } else {
+    tile.gameData.filled = true;
+    tile.gameData.value = number;
     tile.classList.add('number-' + number);
     tile.innerHTML = number;
   }
