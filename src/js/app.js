@@ -1,7 +1,8 @@
 var Board = require('./Board');
 
-var tiles = document.querySelectorAll('.tile');
-
+var $tiles = document.querySelectorAll('.tile');
+var $currentScore = document.getElementById('currentScore');
+var $highestScore = document.getElementById('highestScore');
 var board;
 
 document.onkeydown = onKeyDown;
@@ -10,7 +11,7 @@ var undoBtn = document.getElementById('undoButton');
 undoBtn.onclick = function(e) {
   e.preventDefault();
   e.stopPropagation();
-  board.undo();
+  countScoreAfter(board.undo);
 };
 
 var resetBtn = document.getElementById('resetButton');
@@ -32,10 +33,10 @@ function reset() {
       [0, 0, 0, 0]
     ]);
   }
-  board = new Board(tiles);
+  board = new Board($tiles);
 
   board.nextRound();
-  board.nextRound();
+  countScoreAfter(board.nextRound);
 }
 
 function onKeyDown(e) {
@@ -64,10 +65,16 @@ function onKeyDown(e) {
       if (board.isGameOver()) {
         alert('game over!');
       } else if (moved) {
-        board.nextRound();
+        countScoreAfter(board.nextRound);
       }
     }
   }
+}
+
+function countScoreAfter(fn) {
+  fn.call(board);
+  var score = board.getPoints();
+  $currentScore.innerHTML = score;
 }
 
 document.board = board;
