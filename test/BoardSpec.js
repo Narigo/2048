@@ -227,9 +227,9 @@ describe('Board', function () {
 
   });
 
-  describe('nextRound', function() {
+  describe('nextRound', function () {
 
-    it('is telling us if no new tile can be filled', function() {
+    it('is telling us if no new tile can be filled', function () {
       fillBoardValues([
         [2, 2, 2, 2],
         [2, 2, 2, 2],
@@ -240,7 +240,7 @@ describe('Board', function () {
       expect(board.nextRound()).toBe(false);
     });
 
-    it('is telling us whether tiles can be added', function() {
+    it('is telling us whether tiles can be added', function () {
       fillBoardValues([
         [2, 2, 2, 2],
         [2, 2, 2, 2],
@@ -252,7 +252,7 @@ describe('Board', function () {
       expect(board.nextRound()).toBe(false);
     });
 
-    it('may fill tiles again after move/merge', function() {
+    it('may fill tiles again after move/merge', function () {
       fillBoardValues([
         [2, 2, 2, 2],
         [2, 2, 2, 2],
@@ -901,7 +901,7 @@ describe('Board', function () {
       ]);
     });
 
-    it('should default to 20 when no undo was configured', function() {
+    it('should default to 20 when no undo was configured', function () {
       expect(board._maxHistory).toBe(20);
 
       var game = document.querySelectorAll('.tile');
@@ -911,9 +911,9 @@ describe('Board', function () {
     });
   });
 
-  describe('Points', function() {
+  describe('Points', function () {
 
-    it('does not count any zeros', function() {
+    it('does not count any zeros', function () {
       fillBoardValues([
         [0, 0, 0, 0],
         [0, 0, 0, 0],
@@ -924,7 +924,7 @@ describe('Board', function () {
       expect(board.getPoints()).toBe(0);
     });
 
-    it('counts filled every number', function() {
+    it('counts filled every number', function () {
       fillBoardValues([
         [0, 0, 0, 0],
         [0, 0, 2, 0],
@@ -935,7 +935,7 @@ describe('Board', function () {
       expect(board.getPoints()).toBe(6);
     });
 
-    it('should count merges with additional points', function() {
+    it('should count merges with additional points', function () {
       fillBoardValues([
         [0, 0, 0, 0],
         [0, 0, 0, 0],
@@ -948,7 +948,7 @@ describe('Board', function () {
       expect(board.getPoints()).toBe(8);
     });
 
-    it('undos when undo was used', function() {
+    it('undos when undo was used', function () {
       fillBoardValues([
         [0, 0, 0, 0],
         [0, 0, 0, 0],
@@ -961,6 +961,29 @@ describe('Board', function () {
       board.undo();
       expect(board.getPoints()).toBe(4);
     });
+  });
+
+  describe('Updating scores', function () {
+    it('can register a callback for updating scores with this as board', function (done) {
+      var $game = document.querySelectorAll('.tile');
+      board = new Board($game, {
+        onScoreUpdate : function (score) {
+          expect(score).toBe(8);
+          expect(this).toBe(board);
+          done();
+        }
+      });
+
+      fillBoardValues([
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 2, 2]
+      ]);
+      expect(board.getPoints()).toBe(4);
+      board.moveRight();
+    });
+
   });
 
   function fillBoardValues(filledBoard) {

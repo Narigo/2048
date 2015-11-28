@@ -1,5 +1,7 @@
 var defaults = {
-  maxUndo : 20
+  maxUndo : 20,
+  onScoreUpdate : function (score) {
+  }
 };
 
 function Board(tiles, options) {
@@ -9,6 +11,7 @@ function Board(tiles, options) {
   this._history = [];
   this._points = 0;
   this._maxHistory = config.maxUndo || defaults.maxUndo;
+  this._onScoreUpdate = config.onScoreUpdate || defaults.onScoreUpdate;
 
   [].map.call(tiles, function (tile) {
     var ids = /^tile-(\d)(\d)$/.exec(tile.id);
@@ -204,6 +207,8 @@ Board.prototype.undo = function () {
     this.fillBoardValues(oldState.board);
     this._points = oldState.points;
   }
+
+  this._fireScoreUpdate();
 };
 
 Board.prototype.getCurrentState = function () {
@@ -251,6 +256,14 @@ Board.prototype._moveData = function (data) {
         });
       }
     }
+  }
+
+  this._fireScoreUpdate();
+};
+
+Board.prototype._fireScoreUpdate = function () {
+  if (typeof this._onScoreUpdate === 'function') {
+    this._onScoreUpdate(this.getPoints());
   }
 };
 
