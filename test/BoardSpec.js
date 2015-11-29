@@ -948,6 +948,18 @@ describe('Board', function () {
       expect(board.getPoints()).toBe(8);
     });
 
+    it('should count moves without additional points', function () {
+      fillBoardValues([
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 2, 2]
+      ]);
+      expect(board.getPoints()).toBe(4);
+      board.moveUp();
+      expect(board.getPoints()).toBe(4);
+    });
+
     it('undos when undo was used', function () {
       fillBoardValues([
         [0, 0, 0, 0],
@@ -984,6 +996,41 @@ describe('Board', function () {
       board.moveRight();
     });
 
+    it('will be called on each move and on undo as well', function (done) {
+      var call = 0;
+      var $game = document.querySelectorAll('.tile');
+      board = new Board($game, {
+        onScoreUpdate : function (score) {
+          call++;
+          console.log('called', call, score);
+          if (call === 1) {
+            expect(score).toBe(12);
+          } else if (call === 2) {
+            expect(score).toBe(20);
+          } else if (call === 3) {
+            expect(score).toBe(12);
+          } else if (call === 4) {
+            expect(score).toBe(12);
+          } else if (call === 5) {
+            expect(score).toBe(20);
+            done();
+          }
+        }
+      });
+
+      fillBoardValues([
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 4],
+        [0, 0, 2, 2]
+      ]);
+      expect(board.getPoints()).toBe(8);
+      board.moveRight();
+      board.moveDown();
+      board.undo();
+      board.moveLeft();
+      board.moveUp();
+    });
   });
 
   function fillBoardValues(filledBoard) {
