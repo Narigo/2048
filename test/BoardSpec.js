@@ -1002,7 +1002,6 @@ describe('Board', function () {
       board = new Board($game, {
         onScoreUpdate : function (score) {
           call++;
-          console.log('called', call, score);
           if (call === 1) {
             expect(score).toBe(12);
           } else if (call === 2) {
@@ -1038,7 +1037,7 @@ describe('Board', function () {
     for (var y = 0; y < filledBoard.length; y++) {
       str += '\n';
       for (var x = 0; x < filledBoard[y].length; x++) {
-        board.fillTile(board.getTile(y * 4 + x), filledBoard[y][x]);
+        board.fillTile(board.getTile(y * 4 + x), filledBoard[y][x], filledBoard[y][x]);
         str += ' ' + board._board[x][y].gameData.value;
       }
     }
