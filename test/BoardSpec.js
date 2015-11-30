@@ -921,7 +921,7 @@ describe('Board', function () {
         [0, 0, 0, 0]
       ]);
 
-      expect(board.getPoints()).toBe(0);
+      expect(board.getScore()).toBe(0);
     });
 
     it('counts filled every number', function () {
@@ -932,7 +932,7 @@ describe('Board', function () {
         [0, 4, 0, 0]
       ]);
 
-      expect(board.getPoints()).toBe(6);
+      expect(board.getScore()).toBe(6);
     });
 
     it('should count merges with additional points', function () {
@@ -942,10 +942,10 @@ describe('Board', function () {
         [0, 0, 0, 0],
         [0, 0, 2, 2]
       ]);
-      expect(board.getPoints()).toBe(4);
+      expect(board.getScore()).toBe(4);
       board.moveRight();
 
-      expect(board.getPoints()).toBe(8);
+      expect(board.getScore()).toBe(8);
     });
 
     it('should count moves without additional points', function () {
@@ -955,9 +955,9 @@ describe('Board', function () {
         [0, 0, 0, 0],
         [0, 0, 2, 2]
       ]);
-      expect(board.getPoints()).toBe(4);
+      expect(board.getScore()).toBe(4);
       board.moveUp();
-      expect(board.getPoints()).toBe(4);
+      expect(board.getScore()).toBe(4);
     });
 
     it('undos when undo was used', function () {
@@ -967,11 +967,11 @@ describe('Board', function () {
         [0, 0, 0, 0],
         [0, 0, 2, 2]
       ]);
-      expect(board.getPoints()).toBe(4);
+      expect(board.getScore()).toBe(4);
       board.moveRight();
-      expect(board.getPoints()).toBe(8);
+      expect(board.getScore()).toBe(8);
       board.undo();
-      expect(board.getPoints()).toBe(4);
+      expect(board.getScore()).toBe(4);
     });
   });
 
@@ -992,7 +992,7 @@ describe('Board', function () {
         [0, 0, 0, 0],
         [0, 0, 2, 2]
       ]);
-      expect(board.getPoints()).toBe(4);
+      expect(board.getScore()).toBe(4);
       board.moveRight();
     });
 
@@ -1023,7 +1023,7 @@ describe('Board', function () {
         [0, 0, 0, 4],
         [0, 0, 2, 2]
       ]);
-      expect(board.getPoints()).toBe(8);
+      expect(board.getScore()).toBe(8);
       board.moveRight();
       board.moveDown();
       board.undo();

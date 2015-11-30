@@ -9,7 +9,7 @@ function Board(tiles, options) {
   var config = options || defaults;
   this._board = [];
   this._history = [];
-  this._points = 0;
+  this._score = 0;
   this._maxHistory = config.maxUndo || defaults.maxUndo;
   this._onScoreUpdate = config.onScoreUpdate || defaults.onScoreUpdate;
 
@@ -55,7 +55,7 @@ Board.prototype.nextRound = function () {
 };
 
 Board.prototype.fillTile = function (tile, number, score) {
-  this._points += score;
+  this._score += score;
 
   tile.className = 'tile';
   if (number === 0) {
@@ -211,7 +211,7 @@ Board.prototype.undo = function () {
     var oldState = this._history[this._history.length - 1];
     this._history = this._history.slice(0, this._history.length - 1);
     this.fillBoardValues(oldState.board);
-    this._points = oldState.points;
+    this._score = oldState.points;
   }
 
   this._fireScoreUpdate();
@@ -225,7 +225,7 @@ Board.prototype.getCurrentState = function () {
       board[y][x] = this._board[x][y].gameData.value;
     }
   }
-  return {board : board, points : this._points};
+  return {board : board, points : this._score};
 };
 
 Board.prototype.fillBoardValues = function (filledBoard) {
@@ -269,7 +269,7 @@ Board.prototype._moveData = function (data) {
 
 Board.prototype._fireScoreUpdate = function () {
   if (typeof this._onScoreUpdate === 'function') {
-    this._onScoreUpdate(this.getPoints());
+    this._onScoreUpdate(this.getScore());
   }
 };
 
@@ -296,8 +296,8 @@ Board.prototype._moveInner = function (data, check) {
   }
 };
 
-Board.prototype.getPoints = function () {
-  return this._points;
+Board.prototype.getScore = function () {
+  return this._score;
 };
 
 function isEmptyTile(tile) {

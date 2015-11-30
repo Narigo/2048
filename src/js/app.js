@@ -73,7 +73,7 @@ function onKeyDown(e) {
 
 function countScoreAfter(fn) {
   fn.call(board);
-  var score = board.getPoints();
+  var score = board.getScore();
   $currentScore.innerHTML = score;
 }
 
