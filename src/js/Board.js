@@ -50,12 +50,14 @@ Board.prototype.nextRound = function () {
 
   var randomCellIdx = Math.floor(Math.random() * emptyCells.length);
   var twoOrFour = Math.random() >= 0.75 ? 4 : 2;
-  this.fillTile(emptyCells[randomCellIdx], twoOrFour, twoOrFour);
+  this.fillTile(emptyCells[randomCellIdx], twoOrFour);
   return true;
 };
 
-Board.prototype.fillTile = function (tile, number, score) {
-  this._score += score;
+Board.prototype.fillTile = function (tile, number, countAsScore) {
+  if (countAsScore) {
+    this._score += number;
+  }
 
   tile.className = 'tile';
   if (number === 0) {
@@ -196,13 +198,13 @@ Board.prototype.isGameOver = function () {
 };
 
 Board.prototype.mergeTile = function (a, b) {
-  var score = 0;
   var value = b.gameData.value + a.gameData.value;
 
   if (a.gameData.value > 0 && b.gameData.value > 0) {
-    score = value;
+    this.fillTile(b, value, true);
+  } else {
+    this.fillTile(b, value, false);
   }
-  this.fillTile(b, value, score);
   emptyTile(a);
 };
 
@@ -232,7 +234,7 @@ Board.prototype.fillBoardValues = function (filledBoard) {
   for (var y = 0; y < filledBoard.length; y++) {
     for (var x = 0; x < filledBoard[y].length; x++) {
       var id = y * 4 + x;
-      this.fillTile(this._board[id % 4][Math.floor(id / 4)], filledBoard[y][x], filledBoard[y][x]);
+      this.fillTile(this._board[id % 4][Math.floor(id / 4)], filledBoard[y][x]);
     }
   }
 };

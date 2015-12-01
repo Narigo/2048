@@ -911,7 +911,7 @@ describe('Board', function () {
     });
   });
 
-  describe('Points', function () {
+  describe('Score', function () {
 
     it('does not count any zeros', function () {
       fillBoardValues([
@@ -924,7 +924,7 @@ describe('Board', function () {
       expect(board.getScore()).toBe(0);
     });
 
-    it('counts filled every number', function () {
+    it('should not count filled numbers', function () {
       fillBoardValues([
         [0, 0, 0, 0],
         [0, 0, 2, 0],
@@ -932,7 +932,7 @@ describe('Board', function () {
         [0, 4, 0, 0]
       ]);
 
-      expect(board.getScore()).toBe(6);
+      expect(board.getScore()).toBe(0);
     });
 
     it('should count merges with additional points', function () {
@@ -942,10 +942,10 @@ describe('Board', function () {
         [0, 0, 0, 0],
         [0, 0, 2, 2]
       ]);
-      expect(board.getScore()).toBe(4);
+      expect(board.getScore()).toBe(0);
       board.moveRight();
 
-      expect(board.getScore()).toBe(8);
+      expect(board.getScore()).toBe(4);
     });
 
     it('should count moves without additional points', function () {
@@ -955,9 +955,9 @@ describe('Board', function () {
         [0, 0, 0, 0],
         [0, 0, 2, 2]
       ]);
-      expect(board.getScore()).toBe(4);
+      expect(board.getScore()).toBe(0);
       board.moveUp();
-      expect(board.getScore()).toBe(4);
+      expect(board.getScore()).toBe(0);
     });
 
     it('undos when undo was used', function () {
@@ -967,11 +967,11 @@ describe('Board', function () {
         [0, 0, 0, 0],
         [0, 0, 2, 2]
       ]);
-      expect(board.getScore()).toBe(4);
+      expect(board.getScore()).toBe(0);
       board.moveRight();
-      expect(board.getScore()).toBe(8);
-      board.undo();
       expect(board.getScore()).toBe(4);
+      board.undo();
+      expect(board.getScore()).toBe(0);
     });
   });
 
@@ -980,7 +980,7 @@ describe('Board', function () {
       var $game = document.querySelectorAll('.tile');
       board = new Board($game, {
         onScoreUpdate : function (score) {
-          expect(score).toBe(8);
+          expect(score).toBe(4);
           expect(this).toBe(board);
           done();
         }
@@ -992,7 +992,7 @@ describe('Board', function () {
         [0, 0, 0, 0],
         [0, 0, 2, 2]
       ]);
-      expect(board.getScore()).toBe(4);
+      expect(board.getScore()).toBe(0);
       board.moveRight();
     });
 
@@ -1003,15 +1003,15 @@ describe('Board', function () {
         onScoreUpdate : function (score) {
           call++;
           if (call === 1) {
-            expect(score).toBe(12);
+            expect(score).toBe(4);
           } else if (call === 2) {
-            expect(score).toBe(20);
+            expect(score).toBe(12);
           } else if (call === 3) {
-            expect(score).toBe(12);
+            expect(score).toBe(4);
           } else if (call === 4) {
-            expect(score).toBe(12);
+            expect(score).toBe(4);
           } else if (call === 5) {
-            expect(score).toBe(20);
+            expect(score).toBe(12);
             done();
           }
         }
@@ -1023,7 +1023,7 @@ describe('Board', function () {
         [0, 0, 0, 4],
         [0, 0, 2, 2]
       ]);
-      expect(board.getScore()).toBe(8);
+      expect(board.getScore()).toBe(0);
       board.moveRight();
       board.moveDown();
       board.undo();
@@ -1037,7 +1037,7 @@ describe('Board', function () {
     for (var y = 0; y < filledBoard.length; y++) {
       str += '\n';
       for (var x = 0; x < filledBoard[y].length; x++) {
-        board.fillTile(board.getTile(y * 4 + x), filledBoard[y][x], filledBoard[y][x]);
+        board.fillTile(board.getTile(y * 4 + x), filledBoard[y][x]);
         str += ' ' + board._board[x][y].gameData.value;
       }
     }
