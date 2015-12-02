@@ -1,21 +1,22 @@
 var Board = require('./Board');
 
 var $tiles = document.querySelectorAll('.tile');
-var $currentScore = document.getElementById('currentScore');
-var $highestScore = document.getElementById('highestScore');
+var $currentScore = document.querySelectorAll('.currentScore');
+var $gameOver = document.getElementById('game-over-overlay');
 var board;
 
 document.onkeydown = onKeyDown;
+$gameOver.addEventListener('click', hideGameOverOverlay);
 
 var undoBtn = document.getElementById('undoButton');
-undoBtn.onclick = function(e) {
+undoBtn.onclick = function (e) {
   e.preventDefault();
   e.stopPropagation();
   countScoreAfter(board.undo);
 };
 
 var resetBtn = document.getElementById('resetButton');
-resetBtn.onclick = function(e) {
+resetBtn.onclick = function (e) {
   e.preventDefault();
   e.stopPropagation();
   reset();
@@ -63,7 +64,7 @@ function onKeyDown(e) {
 
     if (keyCode >= 37 && keyCode <= 40) {
       if (board.isGameOver()) {
-        alert('game over!');
+        showGameOverOverlay();
       } else if (moved) {
         countScoreAfter(board.nextRound);
       }
@@ -71,10 +72,21 @@ function onKeyDown(e) {
   }
 }
 
+function showGameOverOverlay() {
+  $gameOver.classList.remove('hidden');
+}
+
+function hideGameOverOverlay() {
+  $gameOver.classList.add('hidden');
+}
+
 function countScoreAfter(fn) {
   fn.call(board);
   var score = board.getScore();
-  $currentScore.innerHTML = score;
+  Array.prototype.forEach.call($currentScore, function(e) {
+    console.log('hello ', e, this);
+    e.innerHTML = score;
+  });
 }
 
 document.board = board;
