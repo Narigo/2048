@@ -1,7 +1,6 @@
 var defaults = {
   maxUndo : 20,
-  onScoreUpdate : function (score) {
-  }
+  highScore : 0
 };
 
 function Board(tiles, options) {
@@ -11,7 +10,8 @@ function Board(tiles, options) {
   this._history = [];
   this._score = 0;
   this._maxHistory = config.maxUndo || defaults.maxUndo;
-  this._onScoreUpdate = config.onScoreUpdate || defaults.onScoreUpdate;
+  this._highScore = config.highScore || defaults.highScore;
+  this._onScoreUpdate = config.onScoreUpdate || null;
 
   [].map.call(tiles, function (tile) {
     var ids = /^tile-(\d)(\d)$/.exec(tile.id);
@@ -270,8 +270,12 @@ Board.prototype._moveData = function (data) {
 };
 
 Board.prototype._fireScoreUpdate = function () {
+  var score = this.getScore();
+  if (this._highScore < score) {
+    this._highScore = score;
+  }
   if (typeof this._onScoreUpdate === 'function') {
-    this._onScoreUpdate(this.getScore());
+    this._onScoreUpdate(score);
   }
 };
 
@@ -300,6 +304,10 @@ Board.prototype._moveInner = function (data, check) {
 
 Board.prototype.getScore = function () {
   return this._score;
+};
+
+Board.prototype.getHighScore = function () {
+  return this._highScore;
 };
 
 function isEmptyTile(tile) {

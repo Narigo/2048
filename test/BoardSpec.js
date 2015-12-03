@@ -973,6 +973,36 @@ describe('Board', function () {
       board.undo();
       expect(board.getScore()).toBe(0);
     });
+
+    it('sets the highest score, if current score is higher than latest high score', function () {
+      var $game = document.querySelectorAll('.tile');
+      board = new Board($game, {highScore : 8});
+      fillBoardValues([
+        [0, 0, 2, 2],
+        [0, 0, 2, 2],
+        [0, 0, 2, 2],
+        [0, 0, 2, 2]
+      ]);
+      expect(board.getScore()).toBe(0);
+      expect(board.getHighScore()).toBe(8);
+      board.moveRight();
+      expect(board.getHighScore()).toBe(16);
+    });
+
+    it('the highest score should not be affected by undo', function () {
+      var $game = document.querySelectorAll('.tile');
+      board = new Board($game, {highScore : 8});
+      fillBoardValues([
+        [0, 0, 2, 2],
+        [0, 0, 2, 2],
+        [0, 0, 2, 2],
+        [0, 0, 2, 2]
+      ]);
+      expect(board.getScore()).toBe(0);
+      expect(board.getHighScore()).toBe(8);
+      board.moveRight();
+      expect(board.getHighScore()).toBe(16);
+    });
   });
 
   describe('Updating scores', function () {
