@@ -1060,6 +1060,47 @@ describe('Board', function () {
       board.moveLeft();
       board.moveUp();
     });
+
+    it('tells the current high score correctly', function(done) {
+      var call = 0;
+      var $game = document.querySelectorAll('.tile');
+      board = new Board($game, {
+        highScore : 8,
+        onScoreUpdate : function (score, highScore) {
+          call++;
+          if (call === 1) {
+            expect(score).toBe(4);
+            expect(highScore).toBe(8);
+          } else if (call === 2) {
+            expect(score).toBe(12);
+            expect(highScore).toBe(12);
+          } else if (call === 3) {
+            expect(score).toBe(4);
+            expect(highScore).toBe(12);
+          } else if (call === 4) {
+            expect(score).toBe(4);
+            expect(highScore).toBe(12);
+          } else if (call === 5) {
+            expect(score).toBe(12);
+            expect(highScore).toBe(12);
+            done();
+          }
+        }
+      });
+
+      fillBoardValues([
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 4],
+        [0, 0, 2, 2]
+      ]);
+      expect(board.getScore()).toBe(0);
+      board.moveRight();
+      board.moveDown();
+      board.undo();
+      board.moveLeft();
+      board.moveUp();
+    });
   });
 
   function fillBoardValues(filledBoard) {

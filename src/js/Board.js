@@ -275,7 +275,7 @@ Board.prototype._fireScoreUpdate = function () {
     this._highScore = score;
   }
   if (typeof this._onScoreUpdate === 'function') {
-    this._onScoreUpdate(score);
+    this._onScoreUpdate(score, this._highScore);
   }
 };
 
