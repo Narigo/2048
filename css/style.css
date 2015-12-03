@@ -1,0 +1,122 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif; }
+
+#game-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center; }
+  #game-wrap .buttons {
+    display: flex;
+    width: 400px;
+    max-width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    text-transform: uppercase; }
+    #game-wrap .buttons #resetButton, #game-wrap .buttons #undoButton {
+      padding: 20px; }
+      #game-wrap .buttons #resetButton:hover, #game-wrap .buttons #undoButton:hover {
+        background-color: #E8E9E8; }
+
+#game-over-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8); }
+  #game-over-overlay.hidden {
+    display: none; }
+
+#game {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-content: stretch;
+  width: 400px;
+  height: 400px;
+  max-width: 100%;
+  max-height: 100%;
+  background-color: #5D574E;
+  border: 5px solid #5D574E;
+  border-radius: 2.5%; }
+  #game .row {
+    display: flex;
+    flex: 1 1 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: stretch; }
+  #game .tile {
+    display: flex;
+    flex: 1 1 100%;
+    align-items: center;
+    justify-content: center;
+    border: 5px solid #5D574E;
+    background-color: #333333;
+    overflow: hidden;
+    border-radius: 10%; }
+  #game .number-2 {
+    color: #5D574E;
+    background-color: #EEEEEE; }
+  #game .number-4 {
+    color: #5D574E;
+    background-color: #E0CEAF; }
+  #game .number-8 {
+    color: #E8E9E8;
+    background-color: #E49961; }
+  #game .number-16 {
+    color: #E8E9E8;
+    background-color: #E67D4D; }
+  #game .number-32 {
+    color: #E8E9E8;
+    background-color: #E5644E; }
+  #game .number-64 {
+    color: #E8E9E8;
+    background-color: #E54832; }
+  #game .number-128 {
+    color: #E8E9E8;
+    background-color: #DFBA58; }
+  #game .number-256 {
+    color: #E8E9E8;
+    background-color: #DFB748; }
+  #game .number-512 {
+    color: #E8E9E8;
+    background-color: #D5B230; }
+  #game .number-1024 {
+    color: #E8E9E8;
+    background-color: #DEB228; }
+  #game .number-2048 {
+    color: #E8E9E8;
+    background-color: #DEAD18; }
+  #game .number-4096 {
+    color: #E8E9E8;
+    background-color: #DD5057; }
+  #game .number-8192 {
+    color: #E8E9E8;
+    background-color: #DB3547; }
+  #game .number-16384 {
+    color: #E8E9E8;
+    background-color: #E52A34; }
+  #game .number-32768 {
+    color: #E8E9E8;
+    background-color: #5FA1C4; }
+  #game .number-65536 {
+    color: #E8E9E8;
+    background-color: #4F8BD7; }
+  #game .number-131072 {
+    color: #E8E9E8;
+    background-color: #186DC0; }
+  #game .number-262144 {
+    color: #E8E9E8;
+    background-color: #FF33FF; }
