@@ -276,7 +276,7 @@ Board.prototype._fireScoreUpdate = function () {
     this._highScore = score;
   }
   if (typeof this._onScoreUpdate === 'function') {
-    this._onScoreUpdate(score);
+    this._onScoreUpdate(score, this._highScore);
   }
 };
 
@@ -329,8 +329,9 @@ var Board = require('./Board');
 
 var $tiles = document.querySelectorAll('.tile');
 var $currentScore = document.querySelectorAll('.currentScore');
+var $highScore = document.querySelectorAll('.highScore');
 var $gameOver = document.getElementById('game-over-overlay');
-var board;
+var board, currentHighScore;
 
 document.onkeydown = onKeyDown;
 $gameOver.addEventListener('click', hideGameOverOverlay);
@@ -361,9 +362,10 @@ function reset() {
       [0, 0, 0, 0]
     ]);
   }
-  setCurrentScore(0);
+  setCurrentScore(0, localStorage.getItem('highScore') || 0);
   board = new Board($tiles, {
-    onScoreUpdate : setCurrentScore
+    onScoreUpdate : setCurrentScore,
+    highScore : currentHighScore
   });
 
   board.nextRound();
@@ -410,9 +412,14 @@ function hideGameOverOverlay() {
   $gameOver.classList.add('hidden');
 }
 
-function setCurrentScore(score) {
+function setCurrentScore(score, highest) {
+  currentHighScore = highest;
+  localStorage.setItem('highScore', highest);
   Array.prototype.forEach.call($currentScore, function(e) {
     e.innerHTML = score;
+  });
+  Array.prototype.forEach.call($highScore, function(e) {
+    e.innerHTML = highest;
   });
 }
 
