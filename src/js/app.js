@@ -12,7 +12,7 @@ var undoBtn = document.getElementById('undoButton');
 undoBtn.onclick = function (e) {
   e.preventDefault();
   e.stopPropagation();
-  countScoreAfter(board.undo);
+  board.undo();
 };
 
 var resetBtn = document.getElementById('resetButton');
@@ -34,10 +34,13 @@ function reset() {
       [0, 0, 0, 0]
     ]);
   }
-  board = new Board($tiles);
+  setCurrentScore(0);
+  board = new Board($tiles, {
+    onScoreUpdate : setCurrentScore
+  });
 
   board.nextRound();
-  countScoreAfter(board.nextRound);
+  board.nextRound();
 }
 
 function onKeyDown(e) {
@@ -66,7 +69,7 @@ function onKeyDown(e) {
       if (board.isGameOver()) {
         showGameOverOverlay();
       } else if (moved) {
-        countScoreAfter(board.nextRound);
+        board.nextRound();
       }
     }
   }
@@ -80,11 +83,8 @@ function hideGameOverOverlay() {
   $gameOver.classList.add('hidden');
 }
 
-function countScoreAfter(fn) {
-  fn.call(board);
-  var score = board.getScore();
+function setCurrentScore(score) {
   Array.prototype.forEach.call($currentScore, function(e) {
-    console.log('hello ', e, this);
     e.innerHTML = score;
   });
 }
