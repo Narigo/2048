@@ -35,7 +35,8 @@ function reset() {
       [0, 0, 0, 0]
     ]);
   }
-  setCurrentScore(0, localStorage.getItem('highScore') || 0);
+  currentHighScore = localStorage.getItem('highScore') || 0;
+  setCurrentScore(0, currentHighScore);
   board = new Board($tiles, {
     onScoreUpdate : setCurrentScore,
     highScore : currentHighScore
