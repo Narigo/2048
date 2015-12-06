@@ -18,6 +18,23 @@ html, body {
   justify-content: center;
   align-items: center;
 
+  .score {
+    display: flex;
+    width: 400px;
+    max-width: 100%;
+    justify-content: space-between;
+    padding: 10px;
+
+    .description {
+      text-transform: uppercase;
+    }
+
+    .count {
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+  }
+
   .buttons {
     display: flex;
     width: 400px;
